@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevSecOps Toolkit — Swiss-Army Knife for Devs, SOC & Data Analysts</title>
+  <meta name="description" content="100% Client-Side DevSecOps, Network, Cybersecurity & Data Analysis Swiss-Army Knife. Multi-Vendor Firewall Transpiler (FortiGate, pfSense, Aruba, AWS, Linux), CIDR/VLSM Architect, SOC Log/IOC Scanner, JSON/CSV/SQL Studio, JWT Auditor & cURL Converter." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Top Navigation -->
+  <header class="topbar">
+    <a href="#" class="brand">
+      <div class="brand-logo">⚡</div>
+      <div>
+        <span class="brand-title">DevSecOps Toolkit</span>
+        <span class="brand-badge">100% Client-Side • Zero Leak</span>
+      </div>
+    </a>
+
+    <div class="topbar-actions">
+      <div class="search-box">
+        <input type="text" id="toolSearch" placeholder="Buscar ferramenta (Ctrl+K)..." />
+      </div>
+      <button class="btn btn-sm" id="themeToggle" title="Alternar Tema Claro/Escuro">🌓 Tema</button>
+      <a href="https://github.com/WallisonWS/devsecops-toolkit" target="_blank" rel="noopener" class="btn btn-sm btn-primary">⭐ Star on GitHub</a>
+    </div>
+  </header>
+
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebarNav">
+      <div class="sidebar-section">Segurança & Redes</div>
+      <button class="nav-btn active" data-target="panel-firewall">
+        <span class="nav-icon">🛡️</span>
+        <span>Firewall & VLAN Transpiler</span>
+      </button>
+      <button class="nav-btn" data-target="panel-cidr">
+        <span class="nav-icon">🌐</span>
+        <span>CIDR & VLSM Architect</span>
+      </button>
+      <button class="nav-btn" data-target="panel-soc">
+        <span class="nav-icon">🔍</span>
+        <span>SOC Log & Secret Scanner</span>
+      </button>
+
+      <div class="sidebar-section">Dados & Desenvolvimento</div>
+      <button class="nav-btn" data-target="panel-data">
+        <span class="nav-icon">📊</span>
+        <span>JSON / CSV / SQL & Profiler</span>
+      </button>
+      <button class="nav-btn" data-target="panel-jwt">
+        <span class="nav-icon">🔐</span>
+        <span>JWT Auditor & Crypto Lab</span>
+      </button>
+      <button class="nav-btn" data-target="panel-dev">
+        <span class="nav-icon">⚡</span>
+        <span>Regex, Cron & cURL → Code</span>
+      </button>
+
+      <div class="sidebar-footer">
+        <div class="privacy-pill">🔒 100% Local & Offline-Ready</div>
+        <div>Nenhum dado, token ou log sai do seu navegador. Ideal para conformidade LGPD / SOC.</div>
+        <div style="margin-top: 8px;">Por <a href="https://github.com/WallisonWS" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">@WallisonWS</a></div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+
+      <!-- 1. MULTI-VENDOR FIREWALL & ZERO TRUST TRANSPILER -->
+      <section class="tool-panel active" id="panel-firewall">
+        <div class="panel-header">
+          <h1>🛡️ Multi-Vendor Firewall & Zero-Trust Rule Transpiler</h1>
+          <p>Desenhe políticas de segmentação VLAN / Zero Trust uma única vez e transpile instantaneamente para <strong>FortiGate (FortiOS)</strong>, <strong>pfSense</strong>, <strong>Aruba / Cisco Switch</strong>, <strong>Linux iptables/UFW</strong> e <strong>Terraform AWS</strong>.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⚙️ Parâmetros da Política de Segurança / VLAN</span>
+            <div class="btn-group">
+              <button class="btn btn-sm" data-fw-preset="iot">Preset: Isolamento CFTV/IoT (VLAN 99)</button>
+              <button class="btn btn-sm" data-fw-preset="guest">Preset: Wi-Fi Visitantes Zero-Trust (VLAN 20)</button>
+              <button class="btn btn-sm" data-fw-preset="web">Preset: DMZ Web Server Hardening</button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fwRuleName">Nome da Regra / Política</label>
+              <input type="text" id="fwRuleName" value="ZT-ISOLATE-IOT-CFTV" />
+            </div>
+            <div class="form-group">
+              <label for="fwAction">Ação (Action)</label>
+              <select id="fwAction">
+                <option value="deny">DENY / DROP (Bloquear)</option>
+                <option value="accept">ACCEPT / ALLOW (Permitir)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fwVlanId">VLAN ID & Nome</label>
+              <input type="text" id="fwVlanId" value="99" placeholder="Ex: 99" />
+            </div>
+            <div class="form-group">
+              <label for="fwInterfaceIn">Interface Origem (Ingress)</label>
+              <input type="text" id="fwInterfaceIn" value="vlan99-iot" />
+            </div>
+            <div class="form-group">
+              <label for="fwInterfaceOut">Interface Destino (Egress)</label>
+              <input type="text" id="fwInterfaceOut" value="wan1" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fwSrcCidr">Rede/IP Origem (Source CIDR)</label>
+              <input type="text" id="fwSrcCidr" class="mono-input" value="10.99.0.0/24" />
+            </div>
+            <div class="form-group">
+              <label for="fwDstCidr">Rede/IP Destino (Destination CIDR)</label>
+              <input type="text" id="fwDstCidr" class="mono-input" value="0.0.0.0/0" />
+            </div>
+            <div class="form-group">
+              <label for="fwProto">Protocolo</label>
+              <select id="fwProto">
+                <option value="ALL">ALL (Qualquer)</option>
+                <option value="TCP">TCP</option>
+                <option value="UDP">UDP</option>
+                <option value="ICMP">ICMP</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fwPorts">Portas Destino (Ex: 80,443 ou 554)</label>
+              <input type="text" id="fwPorts" class="mono-input" value="ALL" />
+            </div>
+            <div class="form-group">
+              <label for="fwLog">Auditoria / Log SIEM</label>
+              <select id="fwLog">
+                <option value="all">Habilitado (Log All Traffic)</option>
+                <option value="utm">Apenas Eventos UTM/Security</option>
+                <option value="disable">Desabilitado</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">💻 Script de Configuração Gerado</span>
+            <button class="btn btn-sm btn-primary" id="copyFwBtn">📋 Copiar Script</button>
+          </div>
+          <div class="vendor-tabs" id="fwVendorTabs">
+            <button class="tab-btn active" data-vendor="fortigate">FortiGate (FortiOS CLI)</button>
+            <button class="tab-btn" data-vendor="pfsense">pfSense / OPNsense</button>
+            <button class="tab-btn" data-vendor="aruba">Aruba / Cisco Switch CLI</button>
+            <button class="tab-btn" data-vendor="linux">Linux (iptables & UFW)</button>
+            <button class="tab-btn" data-vendor="terraform">AWS Terraform (HCL)</button>
+          </div>
+          <pre class="code-output" id="fwCodeOutput"></pre>
+        </div>
+      </section>
+
+      <!-- 2. VISUAL CIDR, SUBNET & VLSM ARCHITECT -->
+      <section class="tool-panel" id="panel-cidr">
+        <div class="panel-header">
+          <h1>🌐 Visual CIDR, Subnet & VLSM Architect</h1>
+          <p>Calculadora avançada de sub-redes IPv4, máscara coringa (Wildcard para ACLs), representação binária e divisor automático de VLANs corporativas.</p>
+        </div>
+
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="cidrInput">Bloco IPv4 CIDR (Ex: 10.10.0.0/16 ou 192.168.10.50/24)</label>
+              <input type="text" id="cidrInput" class="mono-input" value="192.168.10.0/24" />
+            </div>
+            <div class="form-group">
+              <label for="cidrSplitCount">Dividir em Sub-redes / VLANs Iguais</label>
+              <select id="cidrSplitCount">
+                <option value="1">Sem divisão (1 rede)</option>
+                <option value="2">2 Sub-redes (+1 bit)</option>
+                <option value="4" selected>4 Sub-redes (+2 bits: Corp, Guest, IoT, DMZ)</option>
+                <option value="8">8 Sub-redes (+3 bits)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-4" id="cidrStatsGrid"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📐 Plano de Alocação de Sub-redes / VLANs</span>
+            <button class="btn btn-sm" id="copyCidrMarkdownBtn">📋 Exportar Tabela Markdown</button>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="cidrSubnetsTable">
+              <thead>
+                <tr>
+                  <th>VLAN Sugerida</th>
+                  <th>Sub-rede CIDR</th>
+                  <th>Gateway Padrão</th>
+                  <th>Faixa Utilizável (Hosts)</th>
+                  <th>Broadcast</th>
+                  <th>Hosts Úteis</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. SOC LOG, IOC & SECRET LEAK ANALYZER -->
+      <section class="tool-panel" id="panel-soc">
+        <div class="panel-header">
+          <h1>🔍 SOC Log, IOC & Secret Leak Analyzer</h1>
+          <p>Cole logs de servidores (Nginx, Apache, FortiGate, Syslog) ou trechos de código para extrair IOCs (IPs, Domínios, Hashes, CVEs), detectar ataques (SQLi, XSS, Path Traversal, Brute Force) e identificar vazamento de credenciais.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📄 Entrada de Logs / Payload Bruto</span>
+            <div class="btn-group">
+              <button class="btn btn-sm" id="loadSampleSocLog">🧪 Carregar Log de Ataque & Leak (Exemplo)</button>
+              <button class="btn btn-sm btn-primary" id="runSocScanBtn">🔍 Analisar Agora</button>
+            </div>
+          </div>
+          <textarea id="socInput" rows="8" placeholder="Cole aqui logs de acesso HTTP, firewall, stack traces ou arquivos de configuração..."></textarea>
+        </div>
+
+        <div class="grid-4" id="socSummaryCards"></div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🚨 Ameaças Detectadas & Segredos Expostos</span>
+            </div>
+            <div id="socFindingsList"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🎯 IOCs Extraídos & Blocklist Pronta</span>
+              <div class="btn-group">
+                <button class="btn btn-sm" id="defangIocsBtn">🛡️ Defang IOCs (1[.]2[.]3[.]4)</button>
+                <button class="btn btn-sm btn-primary" id="copyBlocklistBtn">📋 Copiar Blocklist</button>
+              </div>
+            </div>
+            <pre class="code-output" id="socIocOutput"></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. DATA & PAYLOAD STUDIO (JSON / CSV / SQL / TYPESCRIPT / DART + PROFILER) -->
+      <section class="tool-panel" id="panel-data">
+        <div class="panel-header">
+          <h1>📊 Data & Payload Studio (JSON ↔ CSV ↔ SQL ↔ TS/Dart + Profiler)</h1>
+          <p>Transforme dados entre formatos para análise ou desenvolvimento, gere comandos SQL (<code>CREATE TABLE</code> + <code>INSERT</code>), modelos tipados (TypeScript / Flutter Dart) e estatísticas automáticas das colunas.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📥 Dados de Entrada (JSON Array ou CSV)</span>
+              <div class="btn-group">
+                <button class="btn btn-sm" id="loadSampleJsonData">Exemplo JSON</button>
+                <button class="btn btn-sm" id="loadSampleCsvData">Exemplo CSV</button>
+              </div>
+            </div>
+            <textarea id="dataStudioInput" rows="12" placeholder="Cole aqui seu JSON ou CSV..."></textarea>
+            <div class="btn-group" style="margin-top: 12px;">
+              <button class="btn btn-sm btn-primary" data-data-action="csv">Converter → CSV</button>
+              <button class="btn btn-sm btn-primary" data-data-action="json">Converter → JSON Pretty</button>
+              <button class="btn btn-sm btn-primary" data-data-action="sql">Gerar → SQL (DDL + INSERT)</button>
+              <button class="btn btn-sm" data-data-action="md">Gerar → Tabela Markdown</button>
+              <button class="btn btn-sm" data-data-action="ts">Gerar → TypeScript Interface</button>
+              <button class="btn btn-sm" data-data-action="dart">Gerar → Dart/Flutter Model</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📤 Resultado Transformado</span>
+              <button class="btn btn-sm btn-primary" id="copyDataOutputBtn">📋 Copiar Saída</button>
+            </div>
+            <pre class="code-output" id="dataStudioOutput" style="min-height: 295px;"></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📈 Data Profiler Automático (Para Analistas de Dados & Sistemas)</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="dataProfileTable">
+              <thead>
+                <tr>
+                  <th>Coluna / Campo</th>
+                  <th>Tipo Inferido</th>
+                  <th>Preenchidos</th>
+                  <th>Nulos / Vazios</th>
+                  <th>Valores Únicos</th>
+                  <th>Mín / Máx / Média (Numéricos)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. JWT AUDITOR, CRYPTO HASH & SECRET GENERATOR -->
+      <section class="tool-panel" id="panel-jwt">
+        <div class="panel-header">
+          <h1>🔐 JWT Security Auditor, Hash & Secret Lab</h1>
+          <p>Inspecione tokens JWT com auditoria automática de vulnerabilidades (<code>alg: none</code>, expiração, dados sensíveis), calcule hashes SHA-256/512 e gere segredos criptográficos com medição de entropia.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🪪 Token JWT (JSON Web Token)</span>
+              <button class="btn btn-sm" id="loadSampleJwtBtn">Carregar JWT de Exemplo</button>
+            </div>
+            <textarea id="jwtInput" rows="4" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+            <div id="jwtAuditBadges" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+            <div style="margin-top: 12px;">
+              <label>Header & Payload Decodificados</label>
+              <pre class="code-output" id="jwtDecodedOutput" style="margin-top: 6px; max-height: 220px;"></pre>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🔑 Gerador de Segredos, API Keys & Hashes</span>
+              <button class="btn btn-sm btn-primary" id="regenSecretsBtn">🔄 Gerar Novos Segredos</button>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label for="hashTextInput">Texto para Hash (SHA-256 / SHA-512) & Base64</label>
+              <input type="text" id="hashTextInput" class="mono-input" value="ZeroTrust-Production-2026!" />
+            </div>
+            <pre class="code-output" id="cryptoLabOutput"></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. REGEX LAB, CRON EXPLAINER & CURL TO CODE -->
+      <section class="tool-panel" id="panel-dev">
+        <div class="panel-header">
+          <h1>⚡ Regex Lab, Cron Explainer & cURL → Code Converter</h1>
+          <p>Utilitários essenciais para o dia a dia do desenvolvedor: conversor de comandos <code>curl</code> para Python/TypeScript/Flutter/PowerShell, interpretador de expressões Cron e laboratório de Regex.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🌐 Conversor cURL → Código Pronto</span>
+              <button class="btn btn-sm" id="copyCurlCodeBtn">📋 Copiar Código</button>
+            </div>
+            <textarea id="curlInput" rows="4">curl -X POST "https://api.empresa.com/v1/alerts" -H "Authorization: Bearer SEU_TOKEN" -H "Content-Type: application/json" -d '{"host":"fw-core-01","severity":"critical"}'</textarea>
+            <div class="vendor-tabs" id="curlLangTabs" style="margin-top: 10px;">
+              <button class="tab-btn active" data-lang="python">Python (requests)</button>
+              <button class="tab-btn" data-lang="ts">TypeScript / JS (fetch)</button>
+              <button class="tab-btn" data-lang="dart">Flutter / Dart (http)</button>
+              <button class="tab-btn" data-lang="ps">PowerShell</button>
+            </div>
+            <pre class="code-output" id="curlCodeOutput"></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">⏱️ Cron Expression Explainer & Regex Tester</span>
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label for="cronInput">Expressão Cron (5 campos: min hora dia mês dia-semana)</label>
+              <input type="text" id="cronInput" class="mono-input" value="*/15 8-18 * * 1-5" />
+              <pre class="code-output" id="cronExplainOutput" style="margin-top: 6px;"></pre>
+            </div>
+
+            <div class="form-group">
+              <label for="regexPatternInput">Expressão Regular (Regex) & Texto de Teste</label>
+              <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                <input type="text" id="regexPatternInput" class="mono-input" value="\b(?:\d{1,3}\.){3}\d{1,3}\b" style="flex: 1;" />
+                <select id="regexPresetSelect" style="width: 165px;">
+                  <option value="\b(?:\d{1,3}\.){3}\d{1,3}\b">Preset: IPv4</option>
+                  <option value="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">Preset: E-mail</option>
+                  <option value="\b\d{3}\.\d{3}\.\d{3}-\d{2}\b">Preset: CPF</option>
+                  <option value="CVE-\d{4}-\d{4,7}">Preset: CVE ID</option>
+                </select>
+              </div>
+              <textarea id="regexTestInput" rows="2">Conexão suspeita de 185.220.101.45 para 10.99.0.12 (CVE-2024-3400)</textarea>
+              <pre class="code-output" id="regexMatchesOutput" style="margin-top: 6px;"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="toast" id="toastNotice">Copiado para a área de transferência!</div>
+  <script src="app.js"></script>
+</body>
+</html>
