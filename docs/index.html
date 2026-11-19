@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DevSecOps Toolkit v2 — 12-in-1 Privacy-First Suite for Devs, SOC & Data Analysts</title>
-  <meta name="description" content="12-in-1 100% Client-Side DevSecOps, Network, Cybersecurity & Data Analysis Suite: Multi-Vendor Firewall Transpiler (FortiGate, pfSense, MikroTik, Aruba, AWS, Linux), CIDR/VLSM, SOC Log/IOC Scanner, CVSS 3.1, HTTP Security Headers, Hardened Docker Compose, SQL ERD, JSON/CSV/SQL Profiler, Diff, JWT Auditor & Chmod/Port Hub." />
+  <title>DevSecOps Toolkit v3 — 16-in-1 Bilingual (EN/PT-BR) Privacy-First Suite</title>
+  <meta name="description" content="16-in-1 Bilingual (EN/PT-BR) 100% Client-Side Suite for Global & Brazilian Developers, AI Engineers, SOC & Data Analysts: Firewall Transpiler, CIDR/VLSM, SOC Scanner, CVSS 3.1, Headers A+, Hardened Docker, SQL ERD, JWT, Diff, AI Token/Cost Estimator, Git Emergency Rescue, TLS 1.3 & Brazil CPF/CNPJ/PIX EMV Kit." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -14,15 +14,16 @@
       <div class="brand-logo">⚡</div>
       <div>
         <span class="brand-title">DevSecOps Toolkit</span>
-        <span class="brand-badge">v2.0 • 12 Tools • Zero Leak</span>
+        <span class="brand-badge">v3.0 • 16 Tools • EN / PT-BR</span>
       </div>
     </a>
 
     <div class="topbar-actions">
       <div class="search-box">
-        <input type="text" id="toolSearch" placeholder="Buscar ferramenta (Ctrl+K)..." />
+        <input type="text" id="toolSearch" placeholder="Search tool / Buscar (Ctrl+K)..." />
       </div>
-      <button class="btn btn-sm" id="themeToggle" title="Alternar Tema">🌓 Tema</button>
+      <button class="btn btn-sm" id="langToggle" title="Switch Language / Mudar Idioma">🌐 PT-BR / EN</button>
+      <button class="btn btn-sm" id="themeToggle" title="Toggle Theme">🌓 Theme</button>
       <a href="https://github.com/WallisonWS/devsecops-toolkit" target="_blank" rel="noopener" class="btn btn-sm btn-primary">⭐ Star on GitHub</a>
     </div>
   </header>
@@ -32,7 +33,7 @@
     <aside class="sidebar" id="sidebarNav">
       <button class="nav-btn active" data-target="panel-home">
         <span class="nav-icon">🏠</span>
-        <span>Visão Geral (12 Tools)</span>
+        <span data-i18n="nav_home">Visão Geral (16 Tools)</span>
       </button>
 
       <div class="sidebar-section">Segurança, SOC & Redes</div>
@@ -90,13 +91,34 @@
       <button class="nav-btn" data-target="panel-ops">
         <span class="nav-icon">📡</span>
         <span>Chmod, Epoch & Ports Hub</span>
-        <span class="nav-pill-new">NEW</span>
+      </button>
+
+      <div class="sidebar-section">AI, Git & Brazil Dev (v3)</div>
+      <button class="nav-btn" data-target="panel-ai-cost">
+        <span class="nav-icon">🧠</span>
+        <span>AI Token & LLM Cost Lab</span>
+        <span class="nav-pill-new">v3</span>
+      </button>
+      <button class="nav-btn" data-target="panel-git">
+        <span class="nav-icon">🚀</span>
+        <span>Git Rescue & .gitignore</span>
+        <span class="nav-pill-new">v3</span>
+      </button>
+      <button class="nav-btn" data-target="panel-tls">
+        <span class="nav-icon">🔒</span>
+        <span>TLS 1.3 & DMARC Hardening</span>
+        <span class="nav-pill-new">v3</span>
+      </button>
+      <button class="nav-btn" data-target="panel-br">
+        <span class="nav-icon">🇧🇷</span>
+        <span>Brazil Dev (CPF/CNPJ/PIX)</span>
+        <span class="nav-pill-new">BR</span>
       </button>
 
       <div class="sidebar-footer">
         <div class="privacy-pill">🔒 100% Client-Side & Offline</div>
-        <div>Nenhum token, log ou config sai do seu navegador. Ideal para LGPD / SOC.</div>
-        <div style="margin-top: 8px;">Por <a href="https://github.com/WallisonWS" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: 700;">@WallisonWS</a></div>
+        <div data-i18n="privacy_desc">Nenhum dado sai do seu navegador. LGPD & GDPR compliant.</div>
+        <div style="margin-top: 8px;">By <a href="https://github.com/WallisonWS" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: 700;">@WallisonWS</a></div>
       </div>
     </aside>
 
@@ -107,12 +129,13 @@
       <section class="tool-panel active" id="panel-home">
         <div class="hero-banner">
           <div>
-            <h1>⚡ DevSecOps Toolkit v2.0</h1>
-            <p>12 ferramentas profissionais 100% locais no navegador para <strong>Desenvolvedores, Analistas de SOC/AppSec, Engenheiros de Redes e Analistas de Dados</strong>. Zero anúncios, zero telemetria, zero vazamento de dados.</p>
+            <h1 data-i18n="hero_title">⚡ DevSecOps Toolkit v3.0 (16-in-1)</h1>
+            <p data-i18n="hero_sub">16 ferramentas profissionais 100% locais no navegador para <strong>Desenvolvedores, Engenheiros de IA, SOC/AppSec, Redes e Analistas de Dados</strong>. Zero anúncios, zero telemetria, zero vazamento de dados (EN / PT-BR).</p>
           </div>
           <div class="btn-group">
-            <a href="https://github.com/WallisonWS/devsecops-toolkit" target="_blank" class="btn btn-primary">⭐ Dar Star no GitHub</a>
-            <a href="https://github.com/WallisonWS/netguard-audit" target="_blank" class="btn">🛡️ Conhecer NetGuard CLI</a>
+            <a href="https://github.com/WallisonWS/devsecops-toolkit" target="_blank" class="btn btn-primary" data-i18n="btn_star">⭐ Star on GitHub</a>
+            <a href="https://wallisonws.github.io/aegis-llm-guard/" target="_blank" class="btn">🛡️ Aegis LLM Guard</a>
+            <a href="https://wallisonws.github.io/sre-osv-sentinel/" target="_blank" class="btn">📈 SRE & OSV</a>
           </div>
         </div>
 
@@ -764,10 +787,151 @@
         </div>
       </section>
 
+      <!-- 13. NEW v3: AI PROMPT TOKEN & LLM COST ESTIMATOR -->
+      <section class="tool-panel" id="panel-ai-cost">
+        <div class="panel-header">
+          <h1>🧠 AI Prompt Token, Context &amp; LLM API Cost Estimator</h1>
+          <p>Estimate prompt token count, context window budget (128K / 1M / 2M) and monthly API spend side-by-side across <strong>Google Gemini 2.5 Pro/Flash</strong>, <strong>GPT-4o</strong> &amp; <strong>Claude Sonnet</strong> — 100% locally.</p>
+        </div>
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="aiDailyCalls">Requests / Day (Production Estimate)</label>
+              <input type="number" id="aiDailyCalls" value="1000" min="1" />
+            </div>
+            <div class="form-group">
+              <label for="aiOutTokens">Avg Output Tokens / Request</label>
+              <input type="number" id="aiOutTokens" value="400" min="10" />
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:14px;">
+            <label for="aiPromptIn">Paste System + User Prompt or Codebase Context</label>
+            <textarea id="aiPromptIn" rows="6">You are a Staff Site Reliability Engineer. Analyze the Kubernetes Deployment YAML and Prometheus burn-rate alert below, identify CIS Benchmark violations, and return a hardened manifest in JSON format.</textarea>
+          </div>
+          <div class="grid-4" id="aiTokenStats"></div>
+          <div class="table-wrap">
+            <table class="data-table" id="aiCostTable">
+              <thead>
+                <tr><th>LLM Model</th><th>Context Window</th><th>Est. Cost / 1K Calls</th><th>Est. Monthly Cost (30d)</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 14. NEW v3: GIT EMERGENCY RESCUE & .GITIGNORE COMPOSER -->
+      <section class="tool-panel" id="panel-git">
+        <div class="panel-header">
+          <h1>🚀 Git Emergency Rescue &amp; Security-First .gitignore Composer</h1>
+          <p>Safe copy-paste commands for critical Git emergencies (leaked <code>.env</code> history scrub, accidental <code>main</code> commit, detached HEAD, deleted branch <code>reflog</code> recovery) + multi-stack <code>.gitignore</code> builder.</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🚨 Git Emergency Scenario</span>
+              <button class="btn btn-sm btn-primary" id="copyGitRescueBtn">📋 Copy Commands</button>
+            </div>
+            <select id="gitRescueSelect" style="width:100%; margin-bottom:12px;">
+              <option value="secret">🔥 Committed a .env / API Secret (Scrub History!)</option>
+              <option value="main">⚠️ Committed to `main` instead of a feature branch</option>
+              <option value="undo">↩️ Undo last commit &amp; KEEP all changes staged</option>
+              <option value="deleted">♻️ Recover accidentally deleted branch via reflog</option>
+              <option value="detached">🧭 Rescue commits from Detached HEAD state</option>
+              <option value="squash">📦 Squash last 3 commits into 1 clean PR commit</option>
+            </select>
+            <pre class="code-output" id="gitRescueOut"></pre>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🛡️ Multi-Stack .gitignore Composer</span>
+              <button class="btn btn-sm btn-primary" id="copyGiBtn">📋 Copy .gitignore</button>
+            </div>
+            <div class="checkbox-grid" id="giStackChecks">
+              <label class="check-pill"><input type="checkbox" value="sec" checked /> Secrets/.env</label>
+              <label class="check-pill"><input type="checkbox" value="node" checked /> Node/Next.js</label>
+              <label class="check-pill"><input type="checkbox" value="python" checked /> Python</label>
+              <label class="check-pill"><input type="checkbox" value="go" /> Go</label>
+              <label class="check-pill"><input type="checkbox" value="flutter" /> Flutter</label>
+              <label class="check-pill"><input type="checkbox" value="docker" /> Terraform</label>
+            </div>
+            <pre class="code-output" id="giStackOut"></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 15. NEW v3: TLS 1.3 CIPHER & DNS/DMARC HARDENING -->
+      <section class="tool-panel" id="panel-tls">
+        <div class="panel-header">
+          <h1>🔒 TLS 1.3 Hardening &amp; Strict DNS Anti-Spoofing (SPF / DMARC / CAA)</h1>
+          <p>Generate Mozilla Modern <strong>TLS 1.3 / SSL Labs A+</strong> configs for Nginx &amp; HAProxy plus strict <code>DMARC p=reject</code>, <code>SPF -all</code> &amp; <code>CAA</code> records to stop email spoofing.</p>
+        </div>
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tlsDomain">Domain Name</label>
+              <input type="text" id="tlsDomain" class="mono-input" value="company.com" />
+            </div>
+            <div class="form-group">
+              <label for="tlsMailProvider">Email Provider (SPF Include)</label>
+              <select id="tlsMailProvider">
+                <option value="include:_spf.google.com">Google Workspace</option>
+                <option value="include:spf.protection.outlook.com">Microsoft 365</option>
+                <option value="include:amazonses.com">Amazon SES</option>
+              </select>
+            </div>
+          </div>
+          <div class="card-header">
+            <span class="card-title">⚙️ Hardened DNS &amp; Nginx TLS 1.3 Config</span>
+            <button class="btn btn-sm btn-primary" id="copyTlsBtn">📋 Copy Config</button>
+          </div>
+          <pre class="code-output" id="tlsHardeningOut"></pre>
+        </div>
+      </section>
+
+      <!-- 16. NEW v3: BRAZIL DEV & LGPD KIT (CPF/CNPJ + REAL PIX EMV CRC16!) -->
+      <section class="tool-panel" id="panel-br">
+        <div class="panel-header">
+          <h1>🇧🇷 Brazil Dev &amp; LGPD Toolkit (CPF/CNPJ QA + PIX EMV BR Code CRC16)</h1>
+          <p>Ferramentas essenciais para desenvolvedores, analistas e QAs no Brasil — 100% client-side, sem anúncios: gerador/validador matemático de <strong>CPF e CNPJ</strong> para testes, gerador oficial de <strong>PIX Estático EMV (Banco Central CRC16-CCITT)</strong> e anonimizador <strong>LGPD</strong>.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🪪 Gerador &amp; Validador de CPF / CNPJ (QA &amp; Testes)</span>
+              <button class="btn btn-sm btn-primary" id="genBrDocsBtn">🔄 Gerar Novos Válidos</button>
+            </div>
+            <div class="form-group" style="margin-bottom:10px;">
+              <label for="brDocValidate">Validar CPF ou CNPJ (com ou sem pontuação)</label>
+              <input type="text" id="brDocValidate" class="mono-input" placeholder="Digite um CPF ou CNPJ para validar..." />
+            </div>
+            <div id="brDocStatus" style="margin-bottom:12px;"></div>
+            <pre class="code-output" id="brDocsGenOut"></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">⚡ Gerador Oficial PIX Copia e Cola (EMV CRC16-CCITT)</span>
+              <button class="btn btn-sm btn-primary" id="copyPixPayloadBtn">📋 Copiar PIX</button>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Chave PIX (CPF/CNPJ/Email/Tel/Aleatória)</label><input id="pixKey" value="contato@suaempresa.com.br" /></div>
+              <div class="form-group"><label>Valor R$ (opcional, ex: 49.90)</label><input id="pixAmt" value="150.00" /></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Nome do Recebedor (sem acentos)</label><input id="pixName" value="WALLISON ARAUJO" /></div>
+              <div class="form-group"><label>Cidade</label><input id="pixCity" value="GOIANIA" /></div>
+            </div>
+            <pre class="code-output" id="pixPayloadOut"></pre>
+          </div>
+        </div>
+      </section>
+
     </main>
   </div>
 
-  <div class="toast" id="toastNotice">Copiado para a área de transferência!</div>
+  <div class="toast" id="toastNotice">Copied to clipboard!</div>
   <script src="app.js"></script>
 </body>
 </html>

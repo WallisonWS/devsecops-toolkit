@@ -17,6 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initDiffComparator();
   initDevUtilities();
   initOpsHub();
+  initAiCostLab();
+  initGitRescueLab();
+  initTlsDmarcLab();
+  initBrazilDevKit();
+  initBilingualSwitch();
 });
 
 function showToast(msg = 'Copiado para a área de transferência!') {
@@ -55,7 +60,11 @@ const LAUNCHPAD_TOOLS = [
   { id: 'panel-jwt', icon: '🔐', title: 'JWT Auditor & Crypto Lab', desc: 'Audite falhas críticas em JWT (alg:none, expiração), SHA-256/512 e gerador CSPRNG.', tags: ['JWT', 'SHA-256', 'Crypto'] },
   { id: 'panel-diff', icon: '⚖️', title: 'Smart Diff Comparator', desc: 'Compare configs de firewall, .env ou JSON linha a linha com total privacidade local.', tags: ['Diff', 'Config', 'Offline'] },
   { id: 'panel-dev', icon: '⚡', title: 'Regex, Cron & cURL → Code', desc: 'Converta cURL para Python/TS/Flutter/PowerShell, decifre Cron e teste Regex.', tags: ['cURL', 'Cron', 'Regex'] },
-  { id: 'panel-ops', icon: '📡', title: 'Chmod, Epoch & Ports Hub', desc: 'Calculadora chmod, conversor Unix Epoch UTC/BRT e tabela pesquisável de Portas e HTTP.', tags: ['Linux', 'Ports', 'HTTP'] }
+  { id: 'panel-ops', icon: '📡', title: 'Chmod, Epoch & Ports Hub', desc: 'Calculadora chmod, conversor Unix Epoch UTC/BRT e tabela pesquisável de Portas e HTTP.', tags: ['Linux', 'Ports', 'HTTP'] },
+  { id: 'panel-ai-cost', icon: '🧠', title: 'AI Token & LLM Cost Lab', desc: 'Estime tokens, janela de contexto e custo mensal de API para Gemini 2.5, GPT-4o & Claude.', tags: ['Gemini', 'LLM', 'v3'] },
+  { id: 'panel-git', icon: '🚀', title: 'Git Rescue & .gitignore', desc: 'Comandos seguros para emergências Git (limpar .env, desfazer main, reflog) + .gitignore.', tags: ['Git', 'DevOps', 'v3'] },
+  { id: 'panel-tls', icon: '🔒', title: 'TLS 1.3 & DMARC Hardening', desc: 'Configurações Mozilla Modern TLS 1.3 (Nginx) + registros DNS rígidos SPF, DMARC & CAA.', tags: ['TLS 1.3', 'DMARC', 'v3'] },
+  { id: 'panel-br', icon: '🇧🇷', title: 'Brazil Dev (CPF/CNPJ/PIX)', desc: 'Gerador/Validador matemático de CPF & CNPJ para QA + gerador oficial PIX EMV CRC16-CCITT.', tags: ['CPF/CNPJ', 'PIX EMV', 'BR'] }
 ];
 
 function initNavigationAndLaunchpad() {
@@ -971,4 +980,220 @@ function initOpsHub() {
   document.getElementById('epochNowBtn').addEventListener('click', () => { ep.value = Math.floor(Date.now() / 1000); updateEpoch(); });
   document.getElementById('opsLookupSearch').addEventListener('input', renderOpsLookup);
   updateChmod(); updateEpoch(); renderOpsLookup();
+}
+
+// ----------------------------------------------------------------------------
+// 13. NEW v3: AI PROMPT TOKEN & LLM COST ESTIMATOR
+// ----------------------------------------------------------------------------
+function initAiCostLab() {
+  const models = [
+    { name: 'Google Gemini 2.5 Flash', ctx: '1,000,000', inPer1M: 0.15, outPer1M: 0.60 },
+    { name: 'Google Gemini 2.5 Pro', ctx: '2,000,000', inPer1M: 1.25, outPer1M: 10.00 },
+    { name: 'OpenAI GPT-4o', ctx: '128,000', inPer1M: 2.50, outPer1M: 10.00 },
+    { name: 'Anthropic Claude Sonnet', ctx: '200,000', inPer1M: 3.00, outPer1M: 15.00 }
+  ];
+  function calc() {
+    const txt = document.getElementById('aiPromptIn').value;
+    const callsDay = Math.max(1, parseInt(document.getElementById('aiDailyCalls').value, 10) || 1000);
+    const outTok = Math.max(1, parseInt(document.getElementById('aiOutTokens').value, 10) || 400);
+    const words = txt.trim() ? txt.trim().split(/\s+/).length : 0;
+    const estInTok = Math.max(1, Math.ceil(txt.length / 3.8));
+
+    document.getElementById('aiTokenStats').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Est. Input Tokens</div><div class="stat-value">${estInTok.toLocaleString()}</div></div>
+      <div class="stat-card"><div class="stat-label">Characters / Words</div><div class="stat-value">${txt.length} / ${words}</div></div>
+      <div class="stat-card"><div class="stat-label">1M Context Used</div><div class="stat-value">${((estInTok / 1000000) * 100).toFixed(4)}%</div></div>
+      <div class="stat-card"><div class="stat-label">Monthly Calls (30d)</div><div class="stat-value">${(callsDay * 30).toLocaleString()}</div></div>`;
+
+    document.querySelector('#aiCostTable tbody').innerHTML = models.map((m) => {
+      const perCall = (estInTok / 1e6) * m.inPer1M + (outTok / 1e6) * m.outPer1M;
+      const per1k = perCall * 1000;
+      const monthly = perCall * callsDay * 30;
+      return `<tr><td><strong>${m.name}</strong></td><td>${m.ctx}</td><td>$${per1k.toFixed(4)}</td><td><span class="badge badge-success">$${monthly.toFixed(2)} / mo</span></td></tr>`;
+    }).join('');
+  }
+  ['aiPromptIn', 'aiDailyCalls', 'aiOutTokens'].forEach((id) => document.getElementById(id).addEventListener('input', calc));
+  calc();
+}
+
+// ----------------------------------------------------------------------------
+// 14. NEW v3: GIT EMERGENCY RESCUE & .GITIGNORE COMPOSER
+// ----------------------------------------------------------------------------
+function initGitRescueLab() {
+  const FIXES = {
+    secret: `# 1) IMMEDIATELY ROTATE/REVOKE the leaked key first!\ngit rm --cached .env\necho ".env*" >> .gitignore\ngit commit -m "chore: untrack .env"\ngit filter-repo --invert-paths --path .env\ngit push origin --force --all`,
+    main: `# Move accidental main commits to a new feature branch safely:\ngit branch feat/safe-branch\ngit reset --hard origin/main\ngit checkout feat/safe-branch`,
+    undo: `# Undo last commit and KEEP all modified files staged:\ngit reset --soft HEAD~1`,
+    deleted: `# Recover a deleted branch via Git reflog:\ngit reflog -n 15\ngit checkout -b recovered-branch <COMMIT_SHA>`,
+    detached: `# Rescue commits from Detached HEAD:\ngit switch -c rescue-detached-branch`,
+    squash: `# Squash last 3 commits into 1 clean commit:\ngit reset --soft HEAD~3\ngit commit -m "feat: consolidated clean PR"`
+  };
+  const GI = {
+    sec: `# Secrets & Credentials\n.env\n.env.*\n!.env.example\n*.pem\n*.key\ncredentials.json`,
+    node: `# Node / Next.js\nnode_modules/\n.next/\ndist/\nout/`,
+    python: `# Python\n__pycache__/\n*.py[cod]\n.venv/\nvenv/`,
+    go: `# Go\n*.exe\n*.test\nvendor/`,
+    flutter: `# Flutter / Dart\n.dart_tool/\nbuild/\nios/Pods/`,
+    docker: `# Terraform\n.terraform/\n*.tfstate*\n*.tfvars`
+  };
+  function render() {
+    document.getElementById('gitRescueOut').textContent = FIXES[document.getElementById('gitRescueSelect').value];
+    const sel = [...document.querySelectorAll('#giStackChecks input:checked')].map((el) => GI[el.value]);
+    document.getElementById('giStackOut').textContent = sel.join('\n\n');
+  }
+  document.getElementById('gitRescueSelect').addEventListener('change', render);
+  document.querySelectorAll('#giStackChecks input').forEach((el) => el.addEventListener('change', render));
+  document.getElementById('copyGitRescueBtn').addEventListener('click', () => copyText(document.getElementById('gitRescueOut').textContent, 'Git commands copied!'));
+  document.getElementById('copyGiBtn').addEventListener('click', () => copyText(document.getElementById('giStackOut').textContent, '.gitignore copied!'));
+  render();
+}
+
+// ----------------------------------------------------------------------------
+// 15. NEW v3: TLS 1.3 & DNS/DMARC HARDENING
+// ----------------------------------------------------------------------------
+function initTlsDmarcLab() {
+  function render() {
+    const dom = document.getElementById('tlsDomain').value.trim() || 'company.com';
+    const spf = document.getElementById('tlsMailProvider').value;
+    document.getElementById('tlsHardeningOut').textContent = `; === 1) Strict DNS Anti-Spoofing Records (${dom}) ===
+@       TXT "v=spf1 ${spf} -all"
+_dmarc  TXT "v=DMARC1; p=reject; sp=reject; pct=100; adkim=s; aspf=s; rua=mailto:dmarc@${dom}"
+@       CAA 0 issue "letsencrypt.org"
+
+# === 2) Nginx Mozilla Modern TLS 1.3 (SSL Labs Grade A+) ===
+ssl_protocols TLSv1.3;
+ssl_prefer_server_ciphers off;
+ssl_session_timeout 1d;
+ssl_session_tickets off;
+ssl_stapling on;
+ssl_stapling_verify on;
+add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;`;
+  }
+  document.getElementById('tlsDomain').addEventListener('input', render);
+  document.getElementById('tlsMailProvider').addEventListener('change', render);
+  document.getElementById('copyTlsBtn').addEventListener('click', () => copyText(document.getElementById('tlsHardeningOut').textContent, 'TLS/DMARC config copied!'));
+  render();
+}
+
+// ----------------------------------------------------------------------------
+// 16. NEW v3: BRAZIL DEV & LGPD KIT (CPF/CNPJ QA + REAL EMV PIX CRC16-CCITT)
+// ----------------------------------------------------------------------------
+function initBrazilDevKit() {
+  function genCpf() {
+    const n = Array.from({ length: 9 }, () => Math.floor(Math.random() * 10));
+    const calcD = (arr) => {
+      const s = arr.reduce((acc, v, i) => acc + v * (arr.length + 1 - i), 0);
+      const r = 11 - (s % 11);
+      return r >= 10 ? 0 : r;
+    };
+    n.push(calcD(n)); n.push(calcD(n));
+    return `${n.slice(0, 3).join('')}.${n.slice(3, 6).join('')}.${n.slice(6, 9).join('')}-${n.slice(9).join('')}`;
+  }
+  function genCnpj() {
+    const n = [...Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)), 0, 0, 0, 1];
+    const calcD = (arr, w) => {
+      const s = arr.reduce((acc, v, i) => acc + v * w[i], 0);
+      const r = s % 11;
+      return r < 2 ? 0 : 11 - r;
+    };
+    n.push(calcD(n, [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]));
+    n.push(calcD(n, [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]));
+    return `${n.slice(0, 2).join('')}.${n.slice(2, 5).join('')}.${n.slice(5, 8).join('')}/${n.slice(8, 12).join('')}-${n.slice(12).join('')}`;
+  }
+  function validateBrDoc(raw) {
+    const d = raw.replace(/\D/g, '');
+    if (d.length === 11 && !/^(\d)\1+$/.test(d)) {
+      const nums = d.split('').map(Number);
+      const d1 = ((nums.slice(0, 9).reduce((a, v, i) => a + v * (10 - i), 0) * 10) % 11) % 10;
+      const d2 = ((nums.slice(0, 10).reduce((a, v, i) => a + v * (11 - i), 0) * 10) % 11) % 10;
+      return d1 === nums[9] && d2 === nums[10] ? 'CPF VÁLIDO ✅' : 'CPF INVÁLIDO ❌';
+    }
+    if (d.length === 14 && !/^(\d)\1+$/.test(d)) {
+      const nums = d.split('').map(Number);
+      const calc = (arr, w) => { const r = arr.reduce((a, v, i) => a + v * w[i], 0) % 11; return r < 2 ? 0 : 11 - r; };
+      const d1 = calc(nums.slice(0, 12), [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+      const d2 = calc(nums.slice(0, 13), [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+      return d1 === nums[12] && d2 === nums[13] ? 'CNPJ VÁLIDO ✅' : 'CNPJ INVÁLIDO ❌';
+    }
+    return d.length ? 'Formato incompleto (use 11 dígitos para CPF ou 14 para CNPJ)' : '';
+  }
+
+  function regenDocs() {
+    const c1 = genCpf(), c2 = genCpf(), j1 = genCnpj();
+    document.getElementById('brDocsGenOut').textContent = `# Documentos Matemáticos Válidos (Uso Exclusivo para QA / Testes)
+CPF  #1 : ${c1}  (Sem pontuação: ${c1.replace(/\D/g, '')})
+CPF  #2 : ${c2}
+CNPJ #1 : ${j1}  (Sem pontuação: ${j1.replace(/\D/g, '')})
+LGPD    : ${c1.slice(0, 3)}.***.***-${c1.slice(-2)} (Anonimizado)`;
+    const valInput = document.getElementById('brDocValidate');
+    if (!valInput.value) valInput.value = c1;
+    updateVal();
+  }
+  function updateVal() {
+    const res = validateBrDoc(document.getElementById('brDocValidate').value);
+    document.getElementById('brDocStatus').innerHTML = res
+      ? `<span class="badge ${res.includes('VÁLIDO') ? 'badge-success' : 'badge-danger'}">${res}</span>` : '';
+  }
+
+  // Official Banco Central EMV PIX BR Code + CRC16-CCITT (Poly 0x1021, Init 0xFFFF)
+  function tlv(id, val) { return `${id}${String(val.length).padStart(2, '0')}${val}`; }
+  function crc16Ccitt(str) {
+    let crc = 0xFFFF;
+    for (let i = 0; i < str.length; i++) {
+      crc ^= str.charCodeAt(i) << 8;
+      for (let j = 0; j < 8; j++) crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) & 0xFFFF : (crc << 1) & 0xFFFF;
+    }
+    return crc.toString(16).toUpperCase().padStart(4, '0');
+  }
+  function updatePix() {
+    const key = document.getElementById('pixKey').value.trim() || 'contato@empresa.com.br';
+    const amt = document.getElementById('pixAmt').value.trim().replace(',', '.');
+    const name = (document.getElementById('pixName').value.trim() || 'RECEBEDOR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').slice(0, 25);
+    const city = (document.getElementById('pixCity').value.trim() || 'SAO PAULO').normalize('NFD').replace(/[\u0300-\u036f]/g, '').slice(0, 15);
+    const mai = tlv('00', 'br.gov.bcb.pix') + tlv('01', key);
+    let payload = tlv('00', '01') + tlv('26', mai) + tlv('52', '0000') + tlv('53', '986');
+    if (amt && !isNaN(Number(amt)) && Number(amt) > 0) payload += tlv('54', Number(amt).toFixed(2));
+    payload += tlv('58', 'BR') + tlv('59', name) + tlv('60', city) + tlv('62', tlv('05', '***')) + '6304';
+    const full = payload + crc16Ccitt(payload);
+    document.getElementById('pixPayloadOut').textContent = full;
+  }
+
+  document.getElementById('genBrDocsBtn').addEventListener('click', regenDocs);
+  document.getElementById('brDocValidate').addEventListener('input', updateVal);
+  ['pixKey', 'pixAmt', 'pixName', 'pixCity'].forEach((id) => document.getElementById(id).addEventListener('input', updatePix));
+  document.getElementById('copyPixPayloadBtn').addEventListener('click', () => copyText(document.getElementById('pixPayloadOut').textContent, 'Código PIX EMV copiado!'));
+  regenDocs(); updatePix();
+}
+
+// ----------------------------------------------------------------------------
+// BILINGUAL SWITCHER (EN / PT-BR)
+// ----------------------------------------------------------------------------
+function initBilingualSwitch() {
+  let lang = 'pt';
+  const DICT = {
+    pt: {
+      nav_home: 'Visão Geral (16 Tools)',
+      hero_title: '⚡ DevSecOps Toolkit v3.0 (16-in-1)',
+      hero_sub: '16 ferramentas profissionais 100% locais no navegador para Desenvolvedores, Engenheiros de IA, SOC/AppSec, Redes e Analistas de Dados. Zero anúncios, zero vazamento (EN / PT-BR).',
+      btn_star: '⭐ Dar Star no GitHub',
+      privacy_desc: 'Nenhum dado sai do seu navegador. Ideal para LGPD & GDPR.'
+    },
+    en: {
+      nav_home: 'Overview (16 Tools)',
+      hero_title: '⚡ DevSecOps Toolkit v3.0 (16-in-1)',
+      hero_sub: '16 zero-leak, 100% client-side tools built for Software Engineers, AI Security, SOC/AppSec, Network & Data Analysts. Zero ads, zero tracking, instant offline execution.',
+      btn_star: '⭐ Star on GitHub',
+      privacy_desc: 'Zero data ever leaves your browser. GDPR & LGPD compliant.'
+    }
+  };
+  const btn = document.getElementById('langToggle');
+  btn.addEventListener('click', () => {
+    lang = lang === 'pt' ? 'en' : 'pt';
+    btn.textContent = lang === 'en' ? '🇧🇷 Português' : '🇺🇸 English';
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const k = el.getAttribute('data-i18n');
+      if (DICT[lang][k]) el.textContent = DICT[lang][k];
+    });
+    showToast(lang === 'en' ? 'Switched to English (US)' : 'Idioma alterado para Português (BR)');
+  });
 }
