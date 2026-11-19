@@ -135,6 +135,18 @@ def transpile_firewall_rule(
             f"   exit"
         )
 
+    if vendor_key == "mikrotik":
+        mk_act = "accept" if is_allow else "drop"
+        mk_proto = "" if proto.upper() == "ALL" else f" protocol={proto.lower()}"
+        mk_port = "" if port.upper() == "ALL" else f" dst-port={port}"
+        return (
+            f"/interface vlan add interface=bridge name={src_intf} vlan-id={vlan}\n"
+            f"/ip firewall filter add chain=forward action={mk_act} "
+            f"in-interface={src_intf} out-interface={dst_intf} "
+            f"src-address={src_net} dst-address={dst_net}{mk_proto}{mk_port} "
+            f'log=yes log-prefix="[{name}] " comment="{name}"'
+        )
+
     if vendor_key == "linux":
         ipt_act = "ACCEPT" if is_allow else "DROP"
         proto_flag = "" if proto.upper() == "ALL" else f"-p {proto.lower()} "
@@ -294,7 +306,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     # firewall
     p_fw = sub.add_parser("firewall", help="Transpile Zero-Trust firewall rule across vendors")
-    p_fw.add_argument("--vendor", choices=["fortigate", "pfsense", "aruba", "cisco", "linux"], default="fortigate")
+    p_fw.add_argument("--vendor", choices=["fortigate", "pfsense", "mikrotik", "aruba", "cisco", "linux"], default="fortigate")
     p_fw.add_argument("--name", default="ZT-ISOLATE-IOT")
     p_fw.add_argument("--action", choices=["accept", "deny"], default="deny")
     p_fw.add_argument("--src", default="10.99.0.0/24")

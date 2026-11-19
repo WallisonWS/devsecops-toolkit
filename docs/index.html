@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DevSecOps Toolkit — Swiss-Army Knife for Devs, SOC & Data Analysts</title>
-  <meta name="description" content="100% Client-Side DevSecOps, Network, Cybersecurity & Data Analysis Swiss-Army Knife. Multi-Vendor Firewall Transpiler (FortiGate, pfSense, Aruba, AWS, Linux), CIDR/VLSM Architect, SOC Log/IOC Scanner, JSON/CSV/SQL Studio, JWT Auditor & cURL Converter." />
+  <title>DevSecOps Toolkit v2 — 12-in-1 Privacy-First Suite for Devs, SOC & Data Analysts</title>
+  <meta name="description" content="12-in-1 100% Client-Side DevSecOps, Network, Cybersecurity & Data Analysis Suite: Multi-Vendor Firewall Transpiler (FortiGate, pfSense, MikroTik, Aruba, AWS, Linux), CIDR/VLSM, SOC Log/IOC Scanner, CVSS 3.1, HTTP Security Headers, Hardened Docker Compose, SQL ERD, JSON/CSV/SQL Profiler, Diff, JWT Auditor & Chmod/Port Hub." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <!-- Top Navigation -->
   <header class="topbar">
-    <a href="#" class="brand">
+    <a class="brand" id="goHomeBrand">
       <div class="brand-logo">⚡</div>
       <div>
         <span class="brand-title">DevSecOps Toolkit</span>
-        <span class="brand-badge">100% Client-Side • Zero Leak</span>
+        <span class="brand-badge">v2.0 • 12 Tools • Zero Leak</span>
       </div>
     </a>
 
@@ -22,16 +22,21 @@
       <div class="search-box">
         <input type="text" id="toolSearch" placeholder="Buscar ferramenta (Ctrl+K)..." />
       </div>
-      <button class="btn btn-sm" id="themeToggle" title="Alternar Tema Claro/Escuro">🌓 Tema</button>
+      <button class="btn btn-sm" id="themeToggle" title="Alternar Tema">🌓 Tema</button>
       <a href="https://github.com/WallisonWS/devsecops-toolkit" target="_blank" rel="noopener" class="btn btn-sm btn-primary">⭐ Star on GitHub</a>
     </div>
   </header>
 
   <div class="app-layout">
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar -->
     <aside class="sidebar" id="sidebarNav">
-      <div class="sidebar-section">Segurança & Redes</div>
-      <button class="nav-btn active" data-target="panel-firewall">
+      <button class="nav-btn active" data-target="panel-home">
+        <span class="nav-icon">🏠</span>
+        <span>Visão Geral (12 Tools)</span>
+      </button>
+
+      <div class="sidebar-section">Segurança, SOC & Redes</div>
+      <button class="nav-btn" data-target="panel-firewall">
         <span class="nav-icon">🛡️</span>
         <span>Firewall & VLAN Transpiler</span>
       </button>
@@ -43,101 +48,147 @@
         <span class="nav-icon">🔍</span>
         <span>SOC Log & Secret Scanner</span>
       </button>
+      <button class="nav-btn" data-target="panel-cvss">
+        <span class="nav-icon">🎯</span>
+        <span>CVSS v3.1 & Report</span>
+        <span class="nav-pill-new">NEW</span>
+      </button>
+      <button class="nav-btn" data-target="panel-headers">
+        <span class="nav-icon">📜</span>
+        <span>Security Headers & CSP</span>
+        <span class="nav-pill-new">NEW</span>
+      </button>
 
-      <div class="sidebar-section">Dados & Desenvolvimento</div>
+      <div class="sidebar-section">Cloud, Dados & Dev</div>
+      <button class="nav-btn" data-target="panel-docker">
+        <span class="nav-icon">🐳</span>
+        <span>Hardened Docker Studio</span>
+        <span class="nav-pill-new">NEW</span>
+      </button>
       <button class="nav-btn" data-target="panel-data">
         <span class="nav-icon">📊</span>
         <span>JSON / CSV / SQL & Profiler</span>
+      </button>
+      <button class="nav-btn" data-target="panel-sql">
+        <span class="nav-icon">🗄️</span>
+        <span>SQL Audit & Mermaid ERD</span>
+        <span class="nav-pill-new">NEW</span>
       </button>
       <button class="nav-btn" data-target="panel-jwt">
         <span class="nav-icon">🔐</span>
         <span>JWT Auditor & Crypto Lab</span>
       </button>
+      <button class="nav-btn" data-target="panel-diff">
+        <span class="nav-icon">⚖️</span>
+        <span>Smart Diff Comparator</span>
+        <span class="nav-pill-new">NEW</span>
+      </button>
       <button class="nav-btn" data-target="panel-dev">
         <span class="nav-icon">⚡</span>
         <span>Regex, Cron & cURL → Code</span>
       </button>
+      <button class="nav-btn" data-target="panel-ops">
+        <span class="nav-icon">📡</span>
+        <span>Chmod, Epoch & Ports Hub</span>
+        <span class="nav-pill-new">NEW</span>
+      </button>
 
       <div class="sidebar-footer">
-        <div class="privacy-pill">🔒 100% Local & Offline-Ready</div>
-        <div>Nenhum dado, token ou log sai do seu navegador. Ideal para conformidade LGPD / SOC.</div>
-        <div style="margin-top: 8px;">Por <a href="https://github.com/WallisonWS" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: 600;">@WallisonWS</a></div>
+        <div class="privacy-pill">🔒 100% Client-Side & Offline</div>
+        <div>Nenhum token, log ou config sai do seu navegador. Ideal para LGPD / SOC.</div>
+        <div style="margin-top: 8px;">Por <a href="https://github.com/WallisonWS" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: 700;">@WallisonWS</a></div>
       </div>
     </aside>
 
     <!-- Main Workspace -->
     <main class="main-content">
 
+      <!-- 0. HOME LAUNCHPAD -->
+      <section class="tool-panel active" id="panel-home">
+        <div class="hero-banner">
+          <div>
+            <h1>⚡ DevSecOps Toolkit v2.0</h1>
+            <p>12 ferramentas profissionais 100% locais no navegador para <strong>Desenvolvedores, Analistas de SOC/AppSec, Engenheiros de Redes e Analistas de Dados</strong>. Zero anúncios, zero telemetria, zero vazamento de dados.</p>
+          </div>
+          <div class="btn-group">
+            <a href="https://github.com/WallisonWS/devsecops-toolkit" target="_blank" class="btn btn-primary">⭐ Dar Star no GitHub</a>
+            <a href="https://github.com/WallisonWS/netguard-audit" target="_blank" class="btn">🛡️ Conhecer NetGuard CLI</a>
+          </div>
+        </div>
+
+        <div class="launchpad-grid" id="launchpadGrid"></div>
+      </section>
+
       <!-- 1. MULTI-VENDOR FIREWALL & ZERO TRUST TRANSPILER -->
-      <section class="tool-panel active" id="panel-firewall">
+      <section class="tool-panel" id="panel-firewall">
         <div class="panel-header">
           <h1>🛡️ Multi-Vendor Firewall & Zero-Trust Rule Transpiler</h1>
-          <p>Desenhe políticas de segmentação VLAN / Zero Trust uma única vez e transpile instantaneamente para <strong>FortiGate (FortiOS)</strong>, <strong>pfSense</strong>, <strong>Aruba / Cisco Switch</strong>, <strong>Linux iptables/UFW</strong> e <strong>Terraform AWS</strong>.</p>
+          <p>Defina políticas de segmentação VLAN / Zero Trust uma vez e transpile para <strong>FortiGate</strong>, <strong>pfSense</strong>, <strong>MikroTik RouterOS</strong>, <strong>Aruba/Cisco</strong>, <strong>Linux iptables/UFW</strong> e <strong>AWS Terraform</strong>.</p>
         </div>
 
         <div class="card">
           <div class="card-header">
-            <span class="card-title">⚙️ Parâmetros da Política de Segurança / VLAN</span>
+            <span class="card-title">⚙️ Parâmetros da Política</span>
             <div class="btn-group">
-              <button class="btn btn-sm" data-fw-preset="iot">Preset: Isolamento CFTV/IoT (VLAN 99)</button>
-              <button class="btn btn-sm" data-fw-preset="guest">Preset: Wi-Fi Visitantes Zero-Trust (VLAN 20)</button>
-              <button class="btn btn-sm" data-fw-preset="web">Preset: DMZ Web Server Hardening</button>
+              <button class="btn btn-sm" data-fw-preset="iot">Preset: Isolar CFTV/IoT (VLAN 99)</button>
+              <button class="btn btn-sm" data-fw-preset="guest">Preset: Wi-Fi Visitantes (VLAN 20)</button>
+              <button class="btn btn-sm" data-fw-preset="web">Preset: DMZ HTTPS Hardening</button>
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="fwRuleName">Nome da Regra / Política</label>
+              <label for="fwRuleName">Nome da Regra</label>
               <input type="text" id="fwRuleName" value="ZT-ISOLATE-IOT-CFTV" />
             </div>
             <div class="form-group">
-              <label for="fwAction">Ação (Action)</label>
+              <label for="fwAction">Ação</label>
               <select id="fwAction">
                 <option value="deny">DENY / DROP (Bloquear)</option>
                 <option value="accept">ACCEPT / ALLOW (Permitir)</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="fwVlanId">VLAN ID & Nome</label>
-              <input type="text" id="fwVlanId" value="99" placeholder="Ex: 99" />
+              <label for="fwVlanId">VLAN ID</label>
+              <input type="text" id="fwVlanId" value="99" />
             </div>
             <div class="form-group">
-              <label for="fwInterfaceIn">Interface Origem (Ingress)</label>
+              <label for="fwInterfaceIn">Interface Origem</label>
               <input type="text" id="fwInterfaceIn" value="vlan99-iot" />
             </div>
             <div class="form-group">
-              <label for="fwInterfaceOut">Interface Destino (Egress)</label>
+              <label for="fwInterfaceOut">Interface Destino</label>
               <input type="text" id="fwInterfaceOut" value="wan1" />
             </div>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="fwSrcCidr">Rede/IP Origem (Source CIDR)</label>
+              <label for="fwSrcCidr">Origem (Source CIDR)</label>
               <input type="text" id="fwSrcCidr" class="mono-input" value="10.99.0.0/24" />
             </div>
             <div class="form-group">
-              <label for="fwDstCidr">Rede/IP Destino (Destination CIDR)</label>
+              <label for="fwDstCidr">Destino (Destination CIDR)</label>
               <input type="text" id="fwDstCidr" class="mono-input" value="0.0.0.0/0" />
             </div>
             <div class="form-group">
               <label for="fwProto">Protocolo</label>
               <select id="fwProto">
-                <option value="ALL">ALL (Qualquer)</option>
+                <option value="ALL">ALL</option>
                 <option value="TCP">TCP</option>
                 <option value="UDP">UDP</option>
                 <option value="ICMP">ICMP</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="fwPorts">Portas Destino (Ex: 80,443 ou 554)</label>
+              <label for="fwPorts">Portas Destino</label>
               <input type="text" id="fwPorts" class="mono-input" value="ALL" />
             </div>
             <div class="form-group">
-              <label for="fwLog">Auditoria / Log SIEM</label>
+              <label for="fwLog">Auditoria / SIEM Log</label>
               <select id="fwLog">
-                <option value="all">Habilitado (Log All Traffic)</option>
-                <option value="utm">Apenas Eventos UTM/Security</option>
+                <option value="all">Log All Traffic</option>
+                <option value="utm">Apenas UTM</option>
                 <option value="disable">Desabilitado</option>
               </select>
             </div>
@@ -146,15 +197,16 @@
 
         <div class="card">
           <div class="card-header">
-            <span class="card-title">💻 Script de Configuração Gerado</span>
+            <span class="card-title">💻 Script Gerado</span>
             <button class="btn btn-sm btn-primary" id="copyFwBtn">📋 Copiar Script</button>
           </div>
           <div class="vendor-tabs" id="fwVendorTabs">
-            <button class="tab-btn active" data-vendor="fortigate">FortiGate (FortiOS CLI)</button>
+            <button class="tab-btn active" data-vendor="fortigate">FortiGate (FortiOS)</button>
             <button class="tab-btn" data-vendor="pfsense">pfSense / OPNsense</button>
-            <button class="tab-btn" data-vendor="aruba">Aruba / Cisco Switch CLI</button>
+            <button class="tab-btn" data-vendor="mikrotik">MikroTik RouterOS</button>
+            <button class="tab-btn" data-vendor="aruba">Aruba / Cisco ACL</button>
             <button class="tab-btn" data-vendor="linux">Linux (iptables & UFW)</button>
-            <button class="tab-btn" data-vendor="terraform">AWS Terraform (HCL)</button>
+            <button class="tab-btn" data-vendor="terraform">AWS Terraform</button>
           </div>
           <pre class="code-output" id="fwCodeOutput"></pre>
         </div>
@@ -164,33 +216,32 @@
       <section class="tool-panel" id="panel-cidr">
         <div class="panel-header">
           <h1>🌐 Visual CIDR, Subnet & VLSM Architect</h1>
-          <p>Calculadora avançada de sub-redes IPv4, máscara coringa (Wildcard para ACLs), representação binária e divisor automático de VLANs corporativas.</p>
+          <p>Calculadora completa de sub-redes IPv4, Wildcard Mask para ACLs e divisor automático de VLANs com exportação Markdown.</p>
         </div>
 
         <div class="card">
           <div class="form-row">
             <div class="form-group" style="grid-column: span 2;">
-              <label for="cidrInput">Bloco IPv4 CIDR (Ex: 10.10.0.0/16 ou 192.168.10.50/24)</label>
+              <label for="cidrInput">Bloco IPv4 CIDR</label>
               <input type="text" id="cidrInput" class="mono-input" value="192.168.10.0/24" />
             </div>
             <div class="form-group">
-              <label for="cidrSplitCount">Dividir em Sub-redes / VLANs Iguais</label>
+              <label for="cidrSplitCount">Dividir em Sub-redes / VLANs</label>
               <select id="cidrSplitCount">
-                <option value="1">Sem divisão (1 rede)</option>
+                <option value="1">1 rede (sem divisão)</option>
                 <option value="2">2 Sub-redes (+1 bit)</option>
                 <option value="4" selected>4 Sub-redes (+2 bits: Corp, Guest, IoT, DMZ)</option>
                 <option value="8">8 Sub-redes (+3 bits)</option>
               </select>
             </div>
           </div>
-
           <div class="grid-4" id="cidrStatsGrid"></div>
         </div>
 
         <div class="card">
           <div class="card-header">
-            <span class="card-title">📐 Plano de Alocação de Sub-redes / VLANs</span>
-            <button class="btn btn-sm" id="copyCidrMarkdownBtn">📋 Exportar Tabela Markdown</button>
+            <span class="card-title">📐 Plano de Alocação de VLANs</span>
+            <button class="btn btn-sm" id="copyCidrMarkdownBtn">📋 Copiar Tabela Markdown</button>
           </div>
           <div class="table-wrap">
             <table class="data-table" id="cidrSubnetsTable">
@@ -198,8 +249,8 @@
                 <tr>
                   <th>VLAN Sugerida</th>
                   <th>Sub-rede CIDR</th>
-                  <th>Gateway Padrão</th>
-                  <th>Faixa Utilizável (Hosts)</th>
+                  <th>Gateway</th>
+                  <th>Faixa Utilizável</th>
                   <th>Broadcast</th>
                   <th>Hosts Úteis</th>
                 </tr>
@@ -210,40 +261,37 @@
         </div>
       </section>
 
-      <!-- 3. SOC LOG, IOC & SECRET LEAK ANALYZER -->
+      <!-- 3. SOC LOG, IOC & SECRET SCANNER -->
       <section class="tool-panel" id="panel-soc">
         <div class="panel-header">
           <h1>🔍 SOC Log, IOC & Secret Leak Analyzer</h1>
-          <p>Cole logs de servidores (Nginx, Apache, FortiGate, Syslog) ou trechos de código para extrair IOCs (IPs, Domínios, Hashes, CVEs), detectar ataques (SQLi, XSS, Path Traversal, Brute Force) e identificar vazamento de credenciais.</p>
+          <p>Extrai IPs públicos/privados, CVEs e Hashes, detecta ataques (SQLi, Path Traversal, XSS) e credenciais vazadas (AWS Keys, Private Keys, JWT) direto no navegador.</p>
         </div>
 
         <div class="card">
           <div class="card-header">
-            <span class="card-title">📄 Entrada de Logs / Payload Bruto</span>
+            <span class="card-title">📄 Logs / Payload Bruto</span>
             <div class="btn-group">
-              <button class="btn btn-sm" id="loadSampleSocLog">🧪 Carregar Log de Ataque & Leak (Exemplo)</button>
-              <button class="btn btn-sm btn-primary" id="runSocScanBtn">🔍 Analisar Agora</button>
+              <button class="btn btn-sm" id="loadSampleSocLog">🧪 Carregar Exemplo</button>
+              <button class="btn btn-sm btn-primary" id="runSocScanBtn">🔍 Analisar</button>
             </div>
           </div>
-          <textarea id="socInput" rows="8" placeholder="Cole aqui logs de acesso HTTP, firewall, stack traces ou arquivos de configuração..."></textarea>
+          <textarea id="socInput" rows="7"></textarea>
         </div>
 
         <div class="grid-4" id="socSummaryCards"></div>
 
         <div class="grid-2">
           <div class="card">
-            <div class="card-header">
-              <span class="card-title">🚨 Ameaças Detectadas & Segredos Expostos</span>
-            </div>
+            <div class="card-header"><span class="card-title">🚨 Ameaças & Segredos Expostos</span></div>
             <div id="socFindingsList"></div>
           </div>
-
           <div class="card">
             <div class="card-header">
-              <span class="card-title">🎯 IOCs Extraídos & Blocklist Pronta</span>
+              <span class="card-title">🎯 IOCs & Blocklist</span>
               <div class="btn-group">
-                <button class="btn btn-sm" id="defangIocsBtn">🛡️ Defang IOCs (1[.]2[.]3[.]4)</button>
-                <button class="btn btn-sm btn-primary" id="copyBlocklistBtn">📋 Copiar Blocklist</button>
+                <button class="btn btn-sm" id="defangIocsBtn">🛡️ Defang</button>
+                <button class="btn btn-sm btn-primary" id="copyBlocklistBtn">📋 Copiar</button>
               </div>
             </div>
             <pre class="code-output" id="socIocOutput"></pre>
@@ -251,56 +299,254 @@
         </div>
       </section>
 
-      <!-- 4. DATA & PAYLOAD STUDIO (JSON / CSV / SQL / TYPESCRIPT / DART + PROFILER) -->
-      <section class="tool-panel" id="panel-data">
+      <!-- 4. NEW: CVSS v3.1 CALCULATOR & INCIDENT REPORT GENERATOR -->
+      <section class="tool-panel" id="panel-cvss">
         <div class="panel-header">
-          <h1>📊 Data & Payload Studio (JSON ↔ CSV ↔ SQL ↔ TS/Dart + Profiler)</h1>
-          <p>Transforme dados entre formatos para análise ou desenvolvimento, gere comandos SQL (<code>CREATE TABLE</code> + <code>INSERT</code>), modelos tipados (TypeScript / Flutter Dart) e estatísticas automáticas das colunas.</p>
+          <h1>🎯 CVSS v3.1 Score Calculator & Vulnerability Report</h1>
+          <p>Calcule o score oficial <strong>FIRST CVSS v3.1 (0.0 – 10.0)</strong>, gere o Vector String e exporte um relatório Markdown completo pronto para Jira, GitHub Issues ou relatórios executivos de Pentest/SOC.</p>
         </div>
 
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <span class="card-title">📥 Dados de Entrada (JSON Array ou CSV)</span>
-              <div class="btn-group">
-                <button class="btn btn-sm" id="loadSampleJsonData">Exemplo JSON</button>
-                <button class="btn btn-sm" id="loadSampleCsvData">Exemplo CSV</button>
-              </div>
+        <div class="cvss-gauge" id="cvssGaugeBox">
+          <div class="cvss-number" id="cvssScoreNum">9.8</div>
+          <div>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+              <span class="badge badge-danger" id="cvssSeverityBadge">CRITICAL</span>
+              <code id="cvssVectorStr" style="font-size:0.84rem; color:var(--accent-primary);"></code>
             </div>
-            <textarea id="dataStudioInput" rows="12" placeholder="Cole aqui seu JSON ou CSV..."></textarea>
-            <div class="btn-group" style="margin-top: 12px;">
-              <button class="btn btn-sm btn-primary" data-data-action="csv">Converter → CSV</button>
-              <button class="btn btn-sm btn-primary" data-data-action="json">Converter → JSON Pretty</button>
-              <button class="btn btn-sm btn-primary" data-data-action="sql">Gerar → SQL (DDL + INSERT)</button>
-              <button class="btn btn-sm" data-data-action="md">Gerar → Tabela Markdown</button>
-              <button class="btn btn-sm" data-data-action="ts">Gerar → TypeScript Interface</button>
-              <button class="btn btn-sm" data-data-action="dart">Gerar → Dart/Flutter Model</button>
+            <div style="font-size:0.82rem; color:var(--text-secondary);">Fórmula oficial CVSS v3.1 Base Score • Atualização em tempo real</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cvssTitle">Título da Vulnerabilidade</label>
+              <input type="text" id="cvssTitle" value="SQL Injection em Endpoint de Autenticação (/api/v1/login)" />
+            </div>
+            <div class="form-group">
+              <label for="cvssAV">Attack Vector (AV)</label>
+              <select id="cvssAV">
+                <option value="N" selected>Network (N)</option>
+                <option value="A">Adjacent (A)</option>
+                <option value="L">Local (L)</option>
+                <option value="P">Physical (P)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cvssAC">Attack Complexity (AC)</label>
+              <select id="cvssAC">
+                <option value="L" selected>Low (L)</option>
+                <option value="H">High (H)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cvssPR">Privileges Required (PR)</label>
+              <select id="cvssPR">
+                <option value="N" selected>None (N)</option>
+                <option value="L">Low (L)</option>
+                <option value="H">High (H)</option>
+              </select>
             </div>
           </div>
-
-          <div class="card">
-            <div class="card-header">
-              <span class="card-title">📤 Resultado Transformado</span>
-              <button class="btn btn-sm btn-primary" id="copyDataOutputBtn">📋 Copiar Saída</button>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cvssUI">User Interaction (UI)</label>
+              <select id="cvssUI">
+                <option value="N" selected>None (N)</option>
+                <option value="R">Required (R)</option>
+              </select>
             </div>
-            <pre class="code-output" id="dataStudioOutput" style="min-height: 295px;"></pre>
+            <div class="form-group">
+              <label for="cvssS">Scope (S)</label>
+              <select id="cvssS">
+                <option value="U" selected>Unchanged (U)</option>
+                <option value="C">Changed (C)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cvssC">Confidentiality (C)</label>
+              <select id="cvssC">
+                <option value="H" selected>High (H)</option>
+                <option value="L">Low (L)</option>
+                <option value="N">None (N)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cvssI">Integrity (I)</label>
+              <select id="cvssI">
+                <option value="H" selected>High (H)</option>
+                <option value="L">Low (L)</option>
+                <option value="N">None (N)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cvssA">Availability (A)</label>
+              <select id="cvssA">
+                <option value="H" selected>High (H)</option>
+                <option value="L">Low (L)</option>
+                <option value="N">None (N)</option>
+              </select>
+            </div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-header">
-            <span class="card-title">📈 Data Profiler Automático (Para Analistas de Dados & Sistemas)</span>
+            <span class="card-title">📝 Relatório Markdown (Jira / GitHub Issue / Pentest)</span>
+            <button class="btn btn-sm btn-primary" id="copyCvssReportBtn">📋 Copiar Relatório</button>
           </div>
+          <pre class="code-output" id="cvssReportOutput"></pre>
+        </div>
+      </section>
+
+      <!-- 5. NEW: HTTP SECURITY HEADERS, CSP & CORS HARDENING GENERATOR -->
+      <section class="tool-panel" id="panel-headers">
+        <div class="panel-header">
+          <h1>📜 HTTP Security Headers, CSP & CORS Hardening Studio</h1>
+          <p>Gere configurações Nota <strong>A+</strong> (Mozilla Observatory / SecurityHeaders) para <strong>Nginx</strong>, <strong>Apache</strong>, <strong>Next.js</strong>, <strong>Cloudflare Workers</strong> e <strong>Traefik</strong>.</p>
+        </div>
+
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="hdrCorsOrigin">CORS Allowed Origin</label>
+              <input type="text" id="hdrCorsOrigin" class="mono-input" value="https://app.suaempresa.com.br" />
+            </div>
+            <div class="form-group">
+              <label for="hdrCspExtra">Domínios extras permitidos no CSP (CDN/API)</label>
+              <input type="text" id="hdrCspExtra" class="mono-input" value="https://api.suaempresa.com.br" />
+            </div>
+            <div class="form-group">
+              <label for="hdrFrame">X-Frame-Options</label>
+              <select id="hdrFrame">
+                <option value="DENY" selected>DENY (Bloqueio total de iframe)</option>
+                <option value="SAMEORIGIN">SAMEORIGIN</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="checkbox-grid">
+            <label class="check-pill"><input type="checkbox" id="hdrHsts" checked /> HSTS Preload (2 anos)</label>
+            <label class="check-pill"><input type="checkbox" id="hdrNosniff" checked /> X-Content-Type-Options: nosniff</label>
+            <label class="check-pill"><input type="checkbox" id="hdrCsp" checked /> Strict Content-Security-Policy (CSP)</label>
+            <label class="check-pill"><input type="checkbox" id="hdrPerms" checked /> Permissions-Policy (Bloqueia câmera/mic/geo)</label>
+            <label class="check-pill"><input type="checkbox" id="hdrCoop" checked /> Cross-Origin-Opener-Policy (same-origin)</label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⚙️ Configuração Hardened Pronta para Produção</span>
+            <button class="btn btn-sm btn-primary" id="copyHdrBtn">📋 Copiar Config</button>
+          </div>
+          <div class="vendor-tabs" id="hdrTargetTabs">
+            <button class="tab-btn active" data-hdr="nginx">Nginx</button>
+            <button class="tab-btn" data-hdr="nextjs">Next.js (next.config.js)</button>
+            <button class="tab-btn" data-hdr="apache">Apache (.htaccess)</button>
+            <button class="tab-btn" data-hdr="cloudflare">Cloudflare Worker</button>
+            <button class="tab-btn" data-hdr="traefik">Traefik YAML</button>
+          </div>
+          <pre class="code-output" id="hdrCodeOutput"></pre>
+        </div>
+      </section>
+
+      <!-- 6. NEW: HARDENED DOCKER COMPOSE & DOCKERFILE GENERATOR -->
+      <section class="tool-panel" id="panel-docker">
+        <div class="panel-header">
+          <h1>🐳 Hardened Docker Compose & Zero-Trust Stack Generator</h1>
+          <p>Monte stacks de produção em segundos com boas práticas de segurança de containers (<code>no-new-privileges</code>, <code>cap_drop: ALL</code>, usuário non-root, redes internas isoladas e Healthchecks).</p>
+        </div>
+
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="dkProjectName">Nome do Projeto / Stack</label>
+              <input type="text" id="dkProjectName" value="secure-api-platform" />
+            </div>
+            <div class="form-group">
+              <label for="dkAppRuntime">Runtime da Aplicação</label>
+              <select id="dkAppRuntime">
+                <option value="node" selected>Node.js 22 (Alpine Non-Root)</option>
+                <option value="python">Python 3.12 FastAPI (Slim Non-Root)</option>
+                <option value="go">Go 1.23 (Distroless Static)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="checkbox-grid">
+            <label class="check-pill"><input type="checkbox" id="dkNginx" checked /> Nginx Reverse Proxy</label>
+            <label class="check-pill"><input type="checkbox" id="dkPostgres" checked /> PostgreSQL 16 (Rede Interna)</label>
+            <label class="check-pill"><input type="checkbox" id="dkRedis" checked /> Redis 7 (Com Senha)</label>
+            <label class="check-pill"><input type="checkbox" id="dkMonitoring" /> Prometheus + Grafana</label>
+            <label class="check-pill"><input type="checkbox" id="dkHardening" checked /> Hardening CIS Docker Benchmark</label>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📄 docker-compose.yml</span>
+              <button class="btn btn-sm btn-primary" id="copyComposeBtn">📋 Copiar Compose</button>
+            </div>
+            <pre class="code-output" id="dkComposeOutput"></pre>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📦 Dockerfile (Multi-Stage Hardened)</span>
+              <button class="btn btn-sm btn-primary" id="copyDockerfileBtn">📋 Copiar Dockerfile</button>
+            </div>
+            <pre class="code-output" id="dkDockerfileOutput"></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. DATA & PAYLOAD STUDIO -->
+      <section class="tool-panel" id="panel-data">
+        <div class="panel-header">
+          <h1>📊 Data & Payload Studio (JSON ↔ CSV ↔ SQL ↔ TS/Dart + Profiler)</h1>
+          <p>Transforme dados entre formatos, gere SQL DDL/INSERT, modelos TypeScript/Flutter e analise qualidade de dados (nulos, únicos, mín/máx/média).</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📥 Entrada (JSON ou CSV)</span>
+              <div class="btn-group">
+                <button class="btn btn-sm" id="loadSampleJsonData">Exemplo JSON</button>
+                <button class="btn btn-sm" id="loadSampleCsvData">Exemplo CSV</button>
+              </div>
+            </div>
+            <textarea id="dataStudioInput" rows="11"></textarea>
+            <div class="btn-group" style="margin-top: 12px;">
+              <button class="btn btn-sm btn-primary" data-data-action="csv">→ CSV</button>
+              <button class="btn btn-sm btn-primary" data-data-action="json">→ JSON</button>
+              <button class="btn btn-sm btn-primary" data-data-action="sql">→ SQL</button>
+              <button class="btn btn-sm" data-data-action="md">→ Markdown</button>
+              <button class="btn btn-sm" data-data-action="ts">→ TypeScript</button>
+              <button class="btn btn-sm" data-data-action="dart">→ Dart/Flutter</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📤 Saída</span>
+              <button class="btn btn-sm btn-primary" id="copyDataOutputBtn">📋 Copiar</button>
+            </div>
+            <pre class="code-output" id="dataStudioOutput" style="min-height: 270px;"></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">📈 Data Profiler Automático</span></div>
           <div class="table-wrap">
             <table class="data-table" id="dataProfileTable">
               <thead>
                 <tr>
-                  <th>Coluna / Campo</th>
-                  <th>Tipo Inferido</th>
+                  <th>Coluna</th>
+                  <th>Tipo</th>
                   <th>Preenchidos</th>
-                  <th>Nulos / Vazios</th>
-                  <th>Valores Únicos</th>
-                  <th>Mín / Máx / Média (Numéricos)</th>
+                  <th>Nulos</th>
+                  <th>Únicos</th>
+                  <th>Estatísticas Numéricas</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -309,34 +555,59 @@
         </div>
       </section>
 
-      <!-- 5. JWT AUDITOR, CRYPTO HASH & SECRET GENERATOR -->
-      <section class="tool-panel" id="panel-jwt">
+      <!-- 8. NEW: SQL FORMATTER, AUDITOR & MERMAID ERD GENERATOR -->
+      <section class="tool-panel" id="panel-sql">
         <div class="panel-header">
-          <h1>🔐 JWT Security Auditor, Hash & Secret Lab</h1>
-          <p>Inspecione tokens JWT com auditoria automática de vulnerabilidades (<code>alg: none</code>, expiração, dados sensíveis), calcule hashes SHA-256/512 e gere segredos criptográficos com medição de entropia.</p>
+          <h1>🗄️ SQL Formatter, Anti-Pattern Auditor & Mermaid ERD Generator</h1>
+          <p>Formate queries SQL, detecte gargalos/riscos de produção (<code>SELECT *</code>, <code>DELETE</code> sem <code>WHERE</code>, <code>LIKE '%...'</code>) e converta DDL <code>CREATE TABLE</code> em diagrama Mermaid <code>erDiagram</code>.</p>
         </div>
 
         <div class="grid-2">
           <div class="card">
             <div class="card-header">
-              <span class="card-title">🪪 Token JWT (JSON Web Token)</span>
-              <button class="btn btn-sm" id="loadSampleJwtBtn">Carregar JWT de Exemplo</button>
+              <span class="card-title">📥 SQL Query ou DDL (CREATE TABLE)</span>
+              <div class="btn-group">
+                <button class="btn btn-sm" id="loadSampleSqlDdl">Exemplo DDL (ERD)</button>
+                <button class="btn btn-sm" id="loadSampleSqlBad">Exemplo Query com Riscos</button>
+              </div>
             </div>
-            <textarea id="jwtInput" rows="4" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
-            <div id="jwtAuditBadges" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
-            <div style="margin-top: 12px;">
-              <label>Header & Payload Decodificados</label>
-              <pre class="code-output" id="jwtDecodedOutput" style="margin-top: 6px; max-height: 220px;"></pre>
-            </div>
+            <textarea id="sqlStudioInput" rows="11"></textarea>
           </div>
-
           <div class="card">
             <div class="card-header">
-              <span class="card-title">🔑 Gerador de Segredos, API Keys & Hashes</span>
-              <button class="btn btn-sm btn-primary" id="regenSecretsBtn">🔄 Gerar Novos Segredos</button>
+              <span class="card-title">📊 Auditoria & Mermaid ERD Gerado</span>
+              <button class="btn btn-sm btn-primary" id="copySqlOutputBtn">📋 Copiar Saída</button>
+            </div>
+            <div id="sqlAuditAlerts" style="margin-bottom:10px; display:flex; flex-direction:column; gap:6px;"></div>
+            <pre class="code-output" id="sqlStudioOutput"></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. JWT AUDITOR & CRYPTO LAB -->
+      <section class="tool-panel" id="panel-jwt">
+        <div class="panel-header">
+          <h1>🔐 JWT Security Auditor, Hash & Secret Lab</h1>
+          <p>Inspecione tokens JWT com auditoria de vulnerabilidades, calcule SHA-256/512 e gere API Keys criptográficas CSPRNG.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🪪 Token JWT</span>
+              <button class="btn btn-sm" id="loadSampleJwtBtn">Exemplo JWT</button>
+            </div>
+            <textarea id="jwtInput" rows="4"></textarea>
+            <div id="jwtAuditBadges" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+            <pre class="code-output" id="jwtDecodedOutput" style="margin-top: 10px; max-height: 220px;"></pre>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🔑 Hash & Gerador de Segredos</span>
+              <button class="btn btn-sm btn-primary" id="regenSecretsBtn">🔄 Gerar Novos</button>
             </div>
             <div class="form-group" style="margin-bottom: 12px;">
-              <label for="hashTextInput">Texto para Hash (SHA-256 / SHA-512) & Base64</label>
+              <label for="hashTextInput">Texto para Hash & Base64</label>
               <input type="text" id="hashTextInput" class="mono-input" value="ZeroTrust-Production-2026!" />
             </div>
             <pre class="code-output" id="cryptoLabOutput"></pre>
@@ -344,44 +615,68 @@
         </div>
       </section>
 
-      <!-- 6. REGEX LAB, CRON EXPLAINER & CURL TO CODE -->
+      <!-- 10. NEW: SMART DIFF & CONFIG COMPARATOR -->
+      <section class="tool-panel" id="panel-diff">
+        <div class="panel-header">
+          <h1>⚖️ Smart Diff & Config Comparator</h1>
+          <p>Compare configurações de firewall, arquivos <code>.env</code>, respostas JSON ou código fonte lado a lado com destaque linha a linha — 100% offline.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">📄 Original (Versão A)</span></div>
+            <textarea id="diffInputA" rows="8"></textarea>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">📄 Modificado (Versão B)</span></div>
+            <textarea id="diffInputB" rows="8"></textarea>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔎 Resultado da Comparação</span>
+            <div id="diffStatsBadge"></div>
+          </div>
+          <div class="diff-box" id="diffResultBox"></div>
+        </div>
+      </section>
+
+      <!-- 11. REGEX, CRON & CURL TO CODE -->
       <section class="tool-panel" id="panel-dev">
         <div class="panel-header">
           <h1>⚡ Regex Lab, Cron Explainer & cURL → Code Converter</h1>
-          <p>Utilitários essenciais para o dia a dia do desenvolvedor: conversor de comandos <code>curl</code> para Python/TypeScript/Flutter/PowerShell, interpretador de expressões Cron e laboratório de Regex.</p>
+          <p>Converta comandos <code>curl</code> para Python/TypeScript/Flutter/PowerShell, decifre expressões Cron e teste Regex.</p>
         </div>
 
         <div class="grid-2">
           <div class="card">
             <div class="card-header">
-              <span class="card-title">🌐 Conversor cURL → Código Pronto</span>
-              <button class="btn btn-sm" id="copyCurlCodeBtn">📋 Copiar Código</button>
+              <span class="card-title">🌐 cURL → Código</span>
+              <button class="btn btn-sm" id="copyCurlCodeBtn">📋 Copiar</button>
             </div>
             <textarea id="curlInput" rows="4">curl -X POST "https://api.empresa.com/v1/alerts" -H "Authorization: Bearer SEU_TOKEN" -H "Content-Type: application/json" -d '{"host":"fw-core-01","severity":"critical"}'</textarea>
             <div class="vendor-tabs" id="curlLangTabs" style="margin-top: 10px;">
-              <button class="tab-btn active" data-lang="python">Python (requests)</button>
-              <button class="tab-btn" data-lang="ts">TypeScript / JS (fetch)</button>
-              <button class="tab-btn" data-lang="dart">Flutter / Dart (http)</button>
+              <button class="tab-btn active" data-lang="python">Python</button>
+              <button class="tab-btn" data-lang="ts">TypeScript / JS</button>
+              <button class="tab-btn" data-lang="dart">Flutter / Dart</button>
               <button class="tab-btn" data-lang="ps">PowerShell</button>
             </div>
             <pre class="code-output" id="curlCodeOutput"></pre>
           </div>
 
           <div class="card">
-            <div class="card-header">
-              <span class="card-title">⏱️ Cron Expression Explainer & Regex Tester</span>
-            </div>
+            <div class="card-header"><span class="card-title">⏱️ Cron Explainer & Regex Lab</span></div>
             <div class="form-group" style="margin-bottom: 14px;">
-              <label for="cronInput">Expressão Cron (5 campos: min hora dia mês dia-semana)</label>
+              <label for="cronInput">Expressão Cron (5 campos)</label>
               <input type="text" id="cronInput" class="mono-input" value="*/15 8-18 * * 1-5" />
               <pre class="code-output" id="cronExplainOutput" style="margin-top: 6px;"></pre>
             </div>
-
             <div class="form-group">
-              <label for="regexPatternInput">Expressão Regular (Regex) & Texto de Teste</label>
+              <label for="regexPatternInput">Regex & Texto de Teste</label>
               <div style="display: flex; gap: 8px; margin-bottom: 6px;">
                 <input type="text" id="regexPatternInput" class="mono-input" value="\b(?:\d{1,3}\.){3}\d{1,3}\b" style="flex: 1;" />
-                <select id="regexPresetSelect" style="width: 165px;">
+                <select id="regexPresetSelect" style="width: 155px;">
                   <option value="\b(?:\d{1,3}\.){3}\d{1,3}\b">Preset: IPv4</option>
                   <option value="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">Preset: E-mail</option>
                   <option value="\b\d{3}\.\d{3}\.\d{3}-\d{2}\b">Preset: CPF</option>
@@ -391,6 +686,80 @@
               <textarea id="regexTestInput" rows="2">Conexão suspeita de 185.220.101.45 para 10.99.0.12 (CVE-2024-3400)</textarea>
               <pre class="code-output" id="regexMatchesOutput" style="margin-top: 6px;"></pre>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12. NEW: CHMOD, EPOCH TIMESTAMP, PORT & HTTP STATUS HUB -->
+      <section class="tool-panel" id="panel-ops">
+        <div class="panel-header">
+          <h1>📡 Chmod Calculator, Epoch Timestamp & Port / HTTP Status Hub</h1>
+          <p>Calculadora visual de permissões Linux (<code>chmod</code>), conversor Unix Epoch ↔ ISO/BRT e referência instantânea pesquisável de Portas TCP/UDP e Códigos HTTP.</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">🐧 Calculadora Linux chmod</span></div>
+            <div class="grid-3" id="chmodMatrix">
+              <div>
+                <strong style="font-size:0.82rem;">Owner (Dono)</strong>
+                <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                  <label class="check-pill"><input type="checkbox" class="cm-bit" data-role="u" value="4" checked /> Read (4)</label>
+                  <label class="check-pill"><input type="checkbox" class="cm-bit" data-role="u" value="2" checked /> Write (2)</label>
+                  <label class="check-pill"><input type="checkbox" class="cm-bit" data-role="u" value="1" checked /> Exec (1)</label>
+                </div>
+              </div>
+              <div>
+                <strong style="font-size:0.82rem;">Group (Grupo)</strong>
+                <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                  <label class="check-pill"><input type="checkbox" class="cm-bit" data-role="g" value="4" checked /> Read (4)</label>
+                  <label class="check-pill"><input type="checkbox" class="cm-bit" data-role="g" value="2" /> Write (2)</label>
+                  <label class="check-pill"><input type="checkbox" class="cm-bit" data-role="g" value="1" checked /> Exec (1)</label>
+                </div>
+              </div>
+              <div>
+                <strong style="font-size:0.82rem;">Others (Outros)</strong>
+                <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px;">
+                  <label class="check-pill"><input type="checkbox" class="cm-bit" data-role="o" value="4" checked /> Read (4)</label>
+                  <label class="check-pill"><input type="checkbox" class="cm-bit" data-role="o" value="2" /> Write (2)</label>
+                  <label class="check-pill"><input type="checkbox" class="cm-bit" data-role="o" value="1" checked /> Exec (1)</label>
+                </div>
+              </div>
+            </div>
+            <pre class="code-output" id="chmodOutput"></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">🕒 Unix Epoch ↔ Data/Hora (UTC & BRT)</span>
+              <button class="btn btn-sm" id="epochNowBtn">Agora</button>
+            </div>
+            <div class="form-group" style="margin-bottom:10px;">
+              <label for="epochInput">Unix Timestamp (segundos ou milissegundos)</label>
+              <input type="text" id="epochInput" class="mono-input" />
+            </div>
+            <pre class="code-output" id="epochOutput"></pre>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🔎 Referência Rápida: Portas de Rede (Risco) & Códigos HTTP</span>
+            <input type="text" id="opsLookupSearch" placeholder="Filtrar porta (ex: 443, 3389, SSH) ou HTTP (403, 502)..." style="width: 310px;" />
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="opsLookupTable">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Código / Porta</th>
+                  <th>Serviço / Nome</th>
+                  <th>Descrição & Nota de Segurança</th>
+                  <th>Nível / Categoria</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
         </div>
       </section>
