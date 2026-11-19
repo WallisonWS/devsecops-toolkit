@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initGitRescueLab();
   initTlsDmarcLab();
   initBrazilDevKit();
+  initJwtSignerLab();
+  initFileHashInspector();
   initBilingualSwitch();
 });
 
@@ -64,7 +66,9 @@ const LAUNCHPAD_TOOLS = [
   { id: 'panel-ai-cost', icon: '🧠', title: 'AI Token & LLM Cost Lab', desc: 'Estime tokens, janela de contexto e custo mensal de API para Gemini 2.5, GPT-4o & Claude.', tags: ['Gemini', 'LLM', 'v3'] },
   { id: 'panel-git', icon: '🚀', title: 'Git Rescue & .gitignore', desc: 'Comandos seguros para emergências Git (limpar .env, desfazer main, reflog) + .gitignore.', tags: ['Git', 'DevOps', 'v3'] },
   { id: 'panel-tls', icon: '🔒', title: 'TLS 1.3 & DMARC Hardening', desc: 'Configurações Mozilla Modern TLS 1.3 (Nginx) + registros DNS rígidos SPF, DMARC & CAA.', tags: ['TLS 1.3', 'DMARC', 'v3'] },
-  { id: 'panel-br', icon: '🇧🇷', title: 'Brazil Dev (CPF/CNPJ/PIX)', desc: 'Gerador/Validador matemático de CPF & CNPJ para QA + gerador oficial PIX EMV CRC16-CCITT.', tags: ['CPF/CNPJ', 'PIX EMV', 'BR'] }
+  { id: 'panel-br', icon: '🇧🇷', title: 'Brazil Dev (CPF/CNPJ/PIX)', desc: 'Gerador/Validador matemático de CPF & CNPJ para QA + gerador oficial PIX EMV CRC16-CCITT.', tags: ['CPF/CNPJ', 'PIX EMV', 'BR'] },
+  { id: 'panel-jwtsign', icon: '🔏', title: 'JWT HS256 Signer & Verifier', desc: 'Assine e verifique tokens JWT HS256 reais com criptografia nativa WebCrypto (HMAC-SHA256).', tags: ['JWT', 'HS256', 'WebCrypto'] },
+  { id: 'panel-filehash', icon: '📦', title: 'File Hash, Hex & Base64', desc: 'Calcule SHA-256/SHA-512 de qualquer arquivo local, inspecione Magic Bytes Hex e gere Base64 Data URI.', tags: ['SHA-256', 'Hex', 'Base64'] }
 ];
 
 function initNavigationAndLaunchpad() {
@@ -1166,34 +1170,144 @@ LGPD    : ${c1.slice(0, 3)}.***.***-${c1.slice(-2)} (Anonimizado)`;
 }
 
 // ----------------------------------------------------------------------------
-// BILINGUAL SWITCHER (EN / PT-BR)
+// 17. NEW v3.5: REAL WEBCRYPTO HS256 JWT SIGNER & VERIFIER
+// ----------------------------------------------------------------------------
+function initJwtSignerLab() {
+  const b64u = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const b64uStr = (s) => b64u(new TextEncoder().encode(s));
+
+  async function hmacSign(data, secret) {
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    return b64u(await crypto.subtle.sign('HMAC', key, enc.encode(data)));
+  }
+
+  async function signJwt() {
+    try {
+      const payloadObj = JSON.parse(document.getElementById('jwtSignPayload').value);
+      const secret = document.getElementById('jwtSignSecret').value;
+      const headerB64 = b64uStr(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+      const payloadB64 = b64uStr(JSON.stringify(payloadObj));
+      const sig = await hmacSign(`${headerB64}.${payloadB64}`, secret);
+      const token = `${headerB64}.${payloadB64}.${sig}`;
+      document.getElementById('jwtSignedOut').textContent = token;
+      const verIn = document.getElementById('jwtVerToken');
+      if (!verIn.dataset.touched) { verIn.value = token; verifyJwt(); }
+    } catch (e) {
+      document.getElementById('jwtSignedOut').textContent = `JSON Error: ${e.message}`;
+    }
+  }
+
+  async function verifyJwt() {
+    const tok = document.getElementById('jwtVerToken').value.trim();
+    const sec = document.getElementById('jwtVerSecret').value;
+    const out = document.getElementById('jwtVerResult');
+    const parts = tok.split('.');
+    if (parts.length !== 3) { out.innerHTML = '<span class="badge badge-danger">Invalid JWT (must have 3 segments)</span>'; return; }
+    const expected = await hmacSign(`${parts[0]}.${parts[1]}`, sec);
+    out.innerHTML = expected === parts[2]
+      ? '<span class="badge badge-success">✅ SIGNATURE VERIFIED — Valid HS256 Cryptographic Match!</span>'
+      : '<span class="badge badge-danger">❌ INVALID SIGNATURE — Token was tampered or secret does not match!</span>';
+  }
+
+  ['jwtSignSecret', 'jwtSignPayload'].forEach((id) => document.getElementById(id).addEventListener('input', signJwt));
+  document.getElementById('jwtVerToken').addEventListener('input', (e) => { e.target.dataset.touched = '1'; verifyJwt(); });
+  document.getElementById('jwtVerSecret').addEventListener('input', verifyJwt);
+  document.getElementById('copySignedJwtBtn').addEventListener('click', () => copyText(document.getElementById('jwtSignedOut').textContent, 'Signed HS256 JWT copied!'));
+  signJwt();
+}
+
+// ----------------------------------------------------------------------------
+// 18. NEW v3.5: FILE CHECKSUM (SHA-256/512), HEX DUMP & BASE64 DATA URI
+// ----------------------------------------------------------------------------
+function initFileHashInspector() {
+  let lastSha256 = '';
+  const toHex = (buf) => [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+
+  function checkMatch() {
+    const exp = document.getElementById('fhExpectedHash').value.trim().toLowerCase();
+    const badge = document.getElementById('fhVerifyBadge');
+    if (!exp || !lastSha256) { badge.innerHTML = ''; return; }
+    badge.innerHTML = exp === lastSha256
+      ? '<span class="badge badge-success">✅ CHECKSUM MATCH — File integrity 100% verified!</span>'
+      : '<span class="badge badge-danger">❌ MISMATCH — File SHA-256 does NOT match expected checksum!</span>';
+  }
+
+  document.getElementById('fhFileInput').addEventListener('change', async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    const buf = await file.arrayBuffer();
+    const bytes = new Uint8Array(buf);
+    lastSha256 = toHex(await crypto.subtle.digest('SHA-256', buf));
+    const sha512 = toHex(await crypto.subtle.digest('SHA-512', buf));
+    const hexPreview = [...bytes.slice(0, 64)].map((b) => b.toString(16).padStart(2, '0').toUpperCase()).join(' ');
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUri = String(reader.result || '');
+      document.getElementById('fhOutput').textContent = `File Name  : ${file.name}
+Size       : ${file.size.toLocaleString()} bytes (${(file.size / 1024).toFixed(2)} KB)
+MIME Type  : ${file.type || 'application/octet-stream'}
+SHA-256    : ${lastSha256}
+SHA-512    : ${sha512.slice(0, 64)}...
+Magic Hex  : ${hexPreview}${bytes.length > 64 ? ' ...' : ''}
+
+Base64 Data URI (first 220 chars):
+${dataUri.slice(0, 220)}${dataUri.length > 220 ? '...' : ''}`;
+      checkMatch();
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('fhExpectedHash').addEventListener('input', checkMatch);
+}
+
+// ----------------------------------------------------------------------------
+// TRILINGUAL SWITCHER (EN / PT-BR / ES) WITH AUTO-DETECT & LOCALSTORAGE
 // ----------------------------------------------------------------------------
 function initBilingualSwitch() {
-  let lang = 'pt';
+  const ORDER = ['pt', 'en', 'es'];
   const DICT = {
     pt: {
-      nav_home: 'Visão Geral (16 Tools)',
-      hero_title: '⚡ DevSecOps Toolkit v3.0 (16-in-1)',
-      hero_sub: '16 ferramentas profissionais 100% locais no navegador para Desenvolvedores, Engenheiros de IA, SOC/AppSec, Redes e Analistas de Dados. Zero anúncios, zero vazamento (EN / PT-BR).',
+      btn: '🇧🇷 PT-BR → 🇺🇸 EN',
+      nav_home: 'Visão Geral (18 Tools)',
+      hero_title: '⚡ DevSecOps Toolkit v3.5 (18-in-1)',
+      hero_sub: '18 ferramentas profissionais 100% locais no navegador para Desenvolvedores, Engenheiros de IA, SOC/AppSec, Redes e Analistas de Dados. Zero anúncios, zero vazamento (PT-BR / EN / ES).',
       btn_star: '⭐ Dar Star no GitHub',
       privacy_desc: 'Nenhum dado sai do seu navegador. Ideal para LGPD & GDPR.'
     },
     en: {
-      nav_home: 'Overview (16 Tools)',
-      hero_title: '⚡ DevSecOps Toolkit v3.0 (16-in-1)',
-      hero_sub: '16 zero-leak, 100% client-side tools built for Software Engineers, AI Security, SOC/AppSec, Network & Data Analysts. Zero ads, zero tracking, instant offline execution.',
+      btn: '🇺🇸 EN → 🇪🇸 ES',
+      nav_home: 'Overview (18 Tools)',
+      hero_title: '⚡ DevSecOps Toolkit v3.5 (18-in-1)',
+      hero_sub: '18 zero-leak, 100% client-side tools built for Software Engineers, AI Security, SOC/AppSec, Network & Data Analysts. Zero ads, zero tracking, instant offline execution.',
       btn_star: '⭐ Star on GitHub',
       privacy_desc: 'Zero data ever leaves your browser. GDPR & LGPD compliant.'
+    },
+    es: {
+      btn: '🇪🇸 ES → 🇧🇷 PT-BR',
+      nav_home: 'Resumen (18 Tools)',
+      hero_title: '⚡ DevSecOps Toolkit v3.5 (18-en-1)',
+      hero_sub: '18 herramientas 100% locales en el navegador para Desarrolladores, Seguridad IA, SOC/AppSec, Redes y Analistas de Datos. Sin anuncios ni envío de datos a servidores.',
+      btn_star: '⭐ Dar Star en GitHub',
+      privacy_desc: 'Ningún dato sale de tu navegador. Cumple con GDPR y LGPD.'
     }
   };
-  const btn = document.getElementById('langToggle');
-  btn.addEventListener('click', () => {
-    lang = lang === 'pt' ? 'en' : 'pt';
-    btn.textContent = lang === 'en' ? '🇧🇷 Português' : '🇺🇸 English';
+  const saved = localStorage.getItem('devsec_lang');
+  const auto = (navigator.language || 'en').toLowerCase().startsWith('pt') ? 'pt' : (navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en';
+  let lang = ORDER.includes(saved) ? saved : auto;
+
+  function applyLang() {
+    localStorage.setItem('devsec_lang', lang);
+    const d = DICT[lang];
+    document.getElementById('langToggle').textContent = d.btn;
     document.querySelectorAll('[data-i18n]').forEach((el) => {
       const k = el.getAttribute('data-i18n');
-      if (DICT[lang][k]) el.textContent = DICT[lang][k];
+      if (d[k]) el.textContent = d[k];
     });
-    showToast(lang === 'en' ? 'Switched to English (US)' : 'Idioma alterado para Português (BR)');
+  }
+  document.getElementById('langToggle').addEventListener('click', () => {
+    lang = ORDER[(ORDER.indexOf(lang) + 1) % ORDER.length];
+    applyLang();
+    showToast(`Language: ${lang.toUpperCase()}`);
   });
+  applyLang();
 }

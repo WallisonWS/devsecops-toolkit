@@ -114,10 +114,20 @@
         <span>Brazil Dev (CPF/CNPJ/PIX)</span>
         <span class="nav-pill-new">BR</span>
       </button>
+      <button class="nav-btn" data-target="panel-jwtsign">
+        <span class="nav-icon">🔏</span>
+        <span>JWT HS256 Signer &amp; Verifier</span>
+        <span class="nav-pill-new">v3.5</span>
+      </button>
+      <button class="nav-btn" data-target="panel-filehash">
+        <span class="nav-icon">📦</span>
+        <span>File Hash, Hex &amp; Base64</span>
+        <span class="nav-pill-new">v3.5</span>
+      </button>
 
       <div class="sidebar-footer">
-        <div class="privacy-pill">🔒 100% Client-Side & Offline</div>
-        <div data-i18n="privacy_desc">Nenhum dado sai do seu navegador. LGPD & GDPR compliant.</div>
+        <div class="privacy-pill">🔒 100% Client-Side &amp; Offline</div>
+        <div data-i18n="privacy_desc">Nenhum dado sai do seu navegador. LGPD &amp; GDPR compliant.</div>
         <div style="margin-top: 8px;">By <a href="https://github.com/WallisonWS" target="_blank" style="color: var(--accent-primary); text-decoration: none; font-weight: 700;">@WallisonWS</a></div>
       </div>
     </aside>
@@ -129,8 +139,8 @@
       <section class="tool-panel active" id="panel-home">
         <div class="hero-banner">
           <div>
-            <h1 data-i18n="hero_title">⚡ DevSecOps Toolkit v3.0 (16-in-1)</h1>
-            <p data-i18n="hero_sub">16 ferramentas profissionais 100% locais no navegador para <strong>Desenvolvedores, Engenheiros de IA, SOC/AppSec, Redes e Analistas de Dados</strong>. Zero anúncios, zero telemetria, zero vazamento de dados (EN / PT-BR).</p>
+            <h1 data-i18n="hero_title">⚡ DevSecOps Toolkit v3.5 (18-in-1)</h1>
+            <p data-i18n="hero_sub">18 ferramentas profissionais 100% locais no navegador para <strong>Desenvolvedores, Engenheiros de IA, SOC/AppSec, Redes e Analistas de Dados</strong>. Zero anúncios, zero telemetria, zero vazamento de dados (EN / PT-BR / ES).</p>
           </div>
           <div class="btn-group">
             <a href="https://github.com/WallisonWS/devsecops-toolkit" target="_blank" class="btn btn-primary" data-i18n="btn_star">⭐ Star on GitHub</a>
@@ -925,6 +935,73 @@
             </div>
             <pre class="code-output" id="pixPayloadOut"></pre>
           </div>
+        </div>
+      </section>
+
+      <!-- 17. NEW v3.5: REAL WEBCRYPTO HS256 JWT SIGNER & VERIFIER -->
+      <section class="tool-panel" id="panel-jwtsign">
+        <div class="panel-header">
+          <h1>🔏 Real HS256 JWT Signer &amp; Cryptographic Verifier (WebCrypto)</h1>
+          <p>Sign real production-valid <strong>HMAC-SHA256 (HS256)</strong> JWT tokens directly in your browser using native <code>crypto.subtle</code> — and cryptographically verify any HS256 JWT signature against a secret!</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">✍️ Payload JSON &amp; HMAC Secret</span>
+              <button class="btn btn-sm btn-primary" id="copySignedJwtBtn">📋 Copy Signed JWT</button>
+            </div>
+            <div class="form-group" style="margin-bottom:10px;">
+              <label for="jwtSignSecret">HMAC-SHA256 Signing Secret</label>
+              <input type="text" id="jwtSignSecret" class="mono-input" value="super-secure-256bit-signing-secret-2026" />
+            </div>
+            <div class="form-group" style="margin-bottom:10px;">
+              <label for="jwtSignPayload">Payload JSON</label>
+              <textarea id="jwtSignPayload" rows="6">{
+  "sub": "usr_9042",
+  "name": "Wallison Araujo",
+  "role": "staff_engineer",
+  "iat": 1795080000,
+  "exp": 1826616000
+}</textarea>
+            </div>
+            <label>Cryptographically Signed JWT Output (HS256)</label>
+            <pre class="code-output" id="jwtSignedOut" style="margin-top:6px; color:#34d399;"></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><span class="card-title">✅ Cryptographic Signature Verifier</span></div>
+            <div class="form-group" style="margin-bottom:10px;">
+              <label for="jwtVerToken">Paste Any HS256 JWT Token to Verify</label>
+              <textarea id="jwtVerToken" rows="5"></textarea>
+            </div>
+            <div class="form-group" style="margin-bottom:10px;">
+              <label for="jwtVerSecret">Secret Key to Verify Against</label>
+              <input type="text" id="jwtVerSecret" class="mono-input" value="super-secure-256bit-signing-secret-2026" />
+            </div>
+            <div id="jwtVerResult"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 18. NEW v3.5: FILE HASH (SHA-256/512), HEX DUMP & BASE64 DATA URI -->
+      <section class="tool-panel" id="panel-filehash">
+        <div class="panel-header">
+          <h1>📦 File Checksum (SHA-256 / SHA-512), Hex Inspector &amp; Base64 Data URI</h1>
+          <p>Drop ANY local file (binary, PDF, image, ISO, script) to compute real cryptographic <strong>SHA-256 &amp; SHA-512 checksums</strong>, inspect magic bytes in <strong>Hex Dump</strong>, and export <strong>Base64 Data URIs</strong> — 100% offline.</p>
+        </div>
+        <div class="card">
+          <div class="form-row">
+            <div class="form-group" style="grid-column:span 2;">
+              <label for="fhFileInput">Select Any File (Never Uploaded — Processed in RAM)</label>
+              <input type="file" id="fhFileInput" />
+            </div>
+            <div class="form-group">
+              <label for="fhExpectedHash">Verify Expected SHA-256 (Optional)</label>
+              <input type="text" id="fhExpectedHash" class="mono-input" placeholder="Paste official SHA-256 to verify integrity..." />
+            </div>
+          </div>
+          <div id="fhVerifyBadge" style="margin-bottom:10px;"></div>
+          <pre class="code-output" id="fhOutput">Select a file above to compute SHA-256, SHA-512, MIME type, Hex Magic Bytes &amp; Base64 Data URI.</pre>
         </div>
       </section>
 
